@@ -8,7 +8,8 @@ public enum Menu {
     Login (new LoginMenu()),
     User (new UserMenu()),
     Product (new ProductMenu()),
-    Store (new StoreMenu());
+    Store (new StoreMenu()),
+    Exit(new ExitMenu());
 
     private final AppMenu menu;
 

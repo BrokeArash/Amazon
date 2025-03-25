@@ -7,27 +7,33 @@ public enum LoginMenuCommands implements Command{
 
     Logout("\\s*logout\\s*"),
     CreateUser("^\\s*create\\s+a\\s+user\\s+account\\s+" +
-            "-fn\\s+(?<firstName>[A-Z]{1}[a-z]+)\\s+" +
-            "-ln\\s+(?<lastName>[A-Z]{1}[a-z]{2,})\\s+" +
-            "-p\\s+(?<password>(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,})\\s+" +
-            "-rp\\s+(?<reEnteredPassword>(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,})\\s+" +
-            "-e\\s+(?<emailAddress>[a-zA-Z0-9.]+@[a-z]+.com\\s*$"),
+            "-fn\\s+(?<firstName>\\S+)\\s+" +
+            "-ln\\s+(?<lastName>\\S+)\\s+" +
+            "-p\\s+(?<password>\\S+)\\s+" +
+            "-rp\\s+(?<reEnteredPassword>\\S+)\\s+" +
+            "-e\\s+(?<emailAddress>\\S+)\\s*$"),
     CreateStore("^\\s*create\\s+a\\s+store\\s+account\\s+" +
-            "-b\\s+(?<brand>.*\\S{1})\\s+" +
-            "-p\\s+(?<password>(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,})\\s+" +
-            "-rp\\s+(?<reEnterPassword>(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,})\\s+" +
-            "-e\\s+(?<email>[a-zA-Z0-9.]+@[a-z]+.com)\\s*"),
-    LoginUser("\\s*login\\s+as\\s+user\\s+" +
-            "-e\\s+(?<email>[a-zA-Z0-9.]+@[a-z]+.com))\\s+" +
-            "-p\\s+(?<password>(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,})"),
-    LoginStore("\\s*login\\s+as\\s+store\\s+" +
-            "-e\\s+(?<email>[a-zA-Z0-9.]+@[a-z]+.com))\\s+" +
-            "-p\\s+(?<password>(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,})"),
-    DeleteAccount("\\s*delete account\\s+" +
-            "-p\\s+(?<password>(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,})\\s+" +
-            "-rp\\s+(?<reEnterPassword>(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,})\\s*"),
-    Back("\\s*go back\\s*"),
-    GoTOMenu("\\s*go to\\s+-m");
+            "-b\\s+(?<brand>\".*\")\\s+" +
+            "-p\\s+(?<password>\\S+)\\s+" +
+            "-rp\\s+(?<reEnterPassword>\\S+)\\s+" +
+            "-e\\s+(?<email>\\S+)\\s*$"),
+    LoginUser("^\\s*login\\s+as\\s+user\\s+" +
+            "-e\\s+(?<email>\\S+)\\s+" +
+            "-p\\s+(?<password>\\S+)\\s*$"),
+    LoginStore("^\\s*login\\s+as\\s+store\\s+" +
+            "-e\\s+(?<email>\\S+)\\s+" +
+            "-p\\s+(?<password>\\S+)\\s*$"),
+    DeleteAccount("^\\s*delete\\s+account\\s+" +
+            "-p\\s+(?<password>\\S+)\\s+" +
+            "-rp\\s+(?<reEnterPassword>\\S+)\\s*$"),
+    Back("^\\s*go\\s+back\\s*$"),
+    GoTOMenu("^\\s*go\\s+to\\s+-m\\s+(?<menu>\\S+)\\s*$"),
+    CheckFirstName("^[A-Z]{1}[a-z]+$"),
+    CheckLastName("^[A-Z]{1}[a-z]{2,}$"),
+    CheckPassword("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,}$"),
+    CheckEmail("^[a-zA-Z0-9]*\\.?[a-zA-Z0-9]+@[a-zA-Z]+\\.com$"),
+    CheckStoreName("^.{3,}$");
+
 
     private final String pattern;
 

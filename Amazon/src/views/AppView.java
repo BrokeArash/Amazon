@@ -1,6 +1,7 @@
 package views;
 
 import models.App;
+import models.enums.Menu;
 
 import java.util.Scanner;
 

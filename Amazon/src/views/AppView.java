@@ -26,6 +26,12 @@ public class AppView{
                 App.setBackRequested(false);
                 App.setCurrentMenu(Menu.MainMenu);
             }
+
+            /* Delete Account */
+            else if (App.isDeleteRequested()) {
+                App.setDeleteRequested(false);
+                App.setCurrentMenu(Menu.MainMenu);
+            }
         }
 
 

@@ -1,11 +1,8 @@
 package controllers;
 
-import models.App;
-import models.Result;
-import models.Store;
-import models.User;
+import models.*;
 import models.enums.LoginMenuCommands;
-import models.enums.Menu;
+import models.enums.UserType;
 
 import java.util.regex.Matcher;
 
@@ -28,10 +25,13 @@ public class LoginMenuController {
             return new Result(false, "Re-entered password is incorrect.");
         } else if (checkEmail == null) {
             return new Result(false, "Incorrect email format.");
-        } else if (!User.isEmailUnique(email)){
+        } else if (!Costumer.isEmailUnique(email)){
             return new Result(false, "Email already exists.");
         } else {
-            App.users.add(new User(firstName, lastName, password, email));
+            User newCostumer = new Costumer(firstName, lastName, password, email);
+            newCostumer.setType(UserType.Costumer);
+            App.costumers.add((Costumer) newCostumer);
+            App.users.add(new Costumer(firstName, lastName, password, email));
             return new Result(true, "User account for "+firstName + " " + lastName + " created successfully.");
         }
     }
@@ -49,10 +49,12 @@ public class LoginMenuController {
             return new Result(false, "Re-entered password is incorrect.");
         } else if (checkEmail == null) {
             return new Result(false, "Incorrect email format.");
-        } else if (!User.isEmailUnique(email)) {
+        } else if (!Costumer.isEmailUnique(email)) {
             return new Result(false, "Email already exists.");
         } else {
-            App.stores.add(new Store(brand, password, email));
+            User newStore = new Store(brand, password, email);
+            App.users.add(newStore);
+            App.stores.add((Store) newStore);
             return new Result(true, "Store account for " + brand + " created successfully.");
         }
     }
@@ -60,12 +62,13 @@ public class LoginMenuController {
 
     public Result loginUser(String email, String password) {
 
-        if (User.getUserByEmail(email) == null) {
+        if (Costumer.getUserByEmail(email) == null) {
             return new Result(false, "No user account found with the provided email.");
-        } else if (!User.getUserByEmail(email).getPassword().equals(password)) {
+        } else if (!Costumer.getUserByEmail(email).getPassword().equals(password)) {
             return new Result(false, "Password is incorrect.");
         } else {
-            App.setLoggedInUser(User.getUserByEmail(email));
+            App.setLoggedIn(Costumer.getUserByEmail(email));
+            App.setLoggedInType(UserType.Costumer);
             App.setLogInSuccessful(true);
             return new Result(true, "User logged in successfully. Redirecting to the MainMenu ...");
         }
@@ -77,18 +80,18 @@ public class LoginMenuController {
         } else if (!Store.getStoreByEmail(email).getPassword().equals(password)) {
             return new Result(false, "Password is incorrect.");
         } else {
-            App.setLoggedInUser(User.getUserByEmail(email));
+            App.setLoggedIn(Costumer.getUserByEmail(email));
+            App.setLoggedInType(UserType.Store);
             App.setLogInSuccessful(true);
             return new Result(true, "Store logged in successfully. Redirecting to the MainMenu ...");
         }
     }
 
     public Result logout() {
-        if (App.getLoggedInStore() == null || App.getLoggedInUser() == null) {
+        if (App.getLoggedIn() == null) {
             return new Result(false, "You should login first.");
         } else {
-            App.setLoggedInStore(null);
-            App.setLoggedInUser(null);
+            App.setLoggedIn(null);
             App.setLogOutRequested(true);
             return new Result(true, "Logged out successfully. Redirecting to the MainMenu ...");
         }
@@ -100,18 +103,25 @@ public class LoginMenuController {
 
     }
 
-    public Result deleteAccount(String password, String reEnterPassword) {
-        if (App.getLoggedInStore() == null && App.getLoggedInUser() == null) {
+    public Result deleteAccount(String password, String reEnterPassword) { //TODO: change later
+        if (App.getLoggedIn() == null) {
             return new Result(false, "You should login first.");
-        }
-        // As User
-        if (App.getLoggedInUser() != null && App.getLoggedInStore() == null) {
-            if (!password.equals(reEnterPassword)) {
-                return new Result(false, "Re-entered password is incorrect.");
-            } else if ()
+        } else if (!password.equals(reEnterPassword)) {
+            return new Result(false, "Re-entered password is incorrect.");
+        } else if (!App.getLoggedIn().getPassword().equals(password)) {
+            return new Result(false, "Password is incorrect.");
+        } else {
+            App.users.remove(App.getLoggedIn());
+            if (App.getLoggedInType().equals(UserType.Costumer)) {
+                App.costumers.remove(App.getLoggedIn());
+            } else {
+                App.stores.remove(App.getLoggedIn());
+            }
+            App.setDeleteRequested(true);
+            return new Result(true, "Account deleted successfully. Redirecting to the MainMenu ...");
+
         }
 
-        } else if ()
 
     }
 }

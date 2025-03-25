@@ -3,7 +3,7 @@ package models.enums;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum UserMenuCommands implements Command{
+public enum CostumerMenuCommands implements Command{
     OrderList("^\\s*list\\s+my\\s+orders\\s*$"),
     OrderDetails("^\\s*show\\s+order\\s+details\\s+-id\\s+(?<orderID>-?\\d+)\\s*$"),
     EditName("^\\s*edit\\s+name\\s+" +
@@ -48,7 +48,7 @@ public enum UserMenuCommands implements Command{
 
     private final String pattern;
 
-    UserMenuCommands(String pattern) {
+    CostumerMenuCommands(String pattern) {
         this.pattern = pattern;
     }
 

@@ -6,11 +6,14 @@ import java.util.ArrayList;
 
 public class App {
     public static ArrayList<User> users = new ArrayList<>();
+    public static ArrayList<Store> stores = new ArrayList<>();
     private static User loggedInUser = null;
-    private static Menu currentMenu = Menu.Login;
-    private static boolean logSuccessful = false;
+    private static Store loggedInStore = null;
+    private static Menu currentMenu = Menu.MainMenu;
+    private static boolean logInSuccessful = false;
     private static boolean logOutRequested = false;
     private static boolean backRequested = false;
+
 
 
     public static Menu getCurrentMenu() {
@@ -27,11 +30,18 @@ public class App {
         App.loggedInUser = loggedInUser;
     }
 
-    public static boolean isLogSuccessful() {
-        return logSuccessful;
+    public static Store getLoggedInStore() {
+        return loggedInStore;
     }
-    public static void setLogSuccessful(boolean logSuccessful) {
-        App.logSuccessful = logSuccessful;
+    public static void setLoggedInStore(Store loggedInStore) {
+        App.loggedInStore = loggedInStore;
+    }
+
+    public static boolean isLogInSuccessful() {
+        return logInSuccessful;
+    }
+    public static void setLogInSuccessful(boolean logInSuccessful) {
+        App.logInSuccessful = logInSuccessful;
     }
 
     public static boolean isLogOutRequested() {

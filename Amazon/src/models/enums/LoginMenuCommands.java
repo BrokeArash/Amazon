@@ -27,9 +27,8 @@ public enum LoginMenuCommands implements Command{
             "-p\\s+(?<password>\\S+)\\s+" +
             "-rp\\s+(?<reEnterPassword>\\S+)\\s*$"),
     Back("^\\s*go\\s+back\\s*$"),
-    GoTOMenu("^\\s*go\\s+to\\s+-m\\s+(?<menu>\\S+)\\s*$"),
-    CheckFirstName("^[A-Z]{1}[a-z]+$"),
-    CheckLastName("^[A-Z]{1}[a-z]{2,}$"),
+    GoToMenu("^\\s*go\\s+to\\s+-m\\s+(?<menu>\\S+)\\s*$"),
+    CheckName("^[A-Z]{1}[a-z]+$"),
     CheckPassword("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,}$"),
     CheckEmail("^[a-zA-Z0-9]*\\.?[a-zA-Z0-9]+@[a-zA-Z]+\\.com$"),
     CheckStoreName("^.{3,}$");

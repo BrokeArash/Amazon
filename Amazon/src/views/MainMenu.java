@@ -1,7 +1,6 @@
 package views;
 
 import models.App;
-import models.enums.LoginMenuCommands;
 import models.enums.MainMenuCommands;
 import models.enums.Menu;
 
@@ -28,12 +27,12 @@ public class MainMenu implements AppMenu{
                 case GoToMenu:
                     Matcher goToMatcher = MainMenuCommands.GoToMenu.getMatcher(input);
                     String menu = goToMatcher.group("menu"); //TODO: might not match
-                    for (Menu command : Menu.values()) {
-                        if (command.name().toLowerCase().equals(menu.toLowerCase())) {
-                            App.setCurrentMenu(command);
-                            System.out.println("Redirecting to the " + menu + " ...");
-                            break;
-                        }
+                    Menu selectedMenu = Menu.findMenu(menu);
+                    if (selectedMenu.equals(Menu.UserMenu) && App.getLoggedIn() == null) {
+                        System.out.println("You need to login as a user before accessing the user menu.");
+                    } else {
+                        App.setCurrentMenu(selectedMenu);
+                        System.out.println("Redirecting to the " + menu + " ...");
                     }
                     break;
                 case Exit:

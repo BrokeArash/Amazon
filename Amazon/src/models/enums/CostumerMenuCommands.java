@@ -24,11 +24,11 @@ public enum CostumerMenuCommands implements Command{
             "-number\\s+(?<cardNumber>-?\\d+)\\s+" +
             "-ed\\s+(?<expirationDate>\\S+)\\s+" +
             "-cvv\\s+(?<cvv>-?\\d+)\\s+" +
-            "-initialValue\\s+(?<initialValue>-?\\d+\\.?\\d+|\\d+)\\s*$"),
+            "-initialValue\\s+(?<initialValue>-?\\d+\\.?\\d+|-?\\d+)\\s*$"),
     ChargeCard("^\\s*Charge\\s+credit\\s+card\\s+" +
-            "-a\\s+(?<amount>-?\\d+\\.?\\d+|\\d+)\\s+" +
+            "-a\\s+(?<amount>-?\\d+\\.?\\d+|-?\\d+)\\s+" +
             "-id\\s+(?<id>-?\\d+)\\s*$"),
-    CheckCardBalance("^\\s*Check\\s+credit\\s+card\\s+balance\\s+-d\\s+(?<id>-?\\d+)\\s*$"),
+    CheckCardBalance("^\\s*Check\\s+credit\\s+card\\s+balance\\s+-id\\s+(?<id>-?\\d+)\\s*$"),
     ShowProductsInCart("^\\s*show\\s+products\\s+in\\s+cart\\s*$"),
     Checkout("^\\s*checkout\\s+" +
             "-card\\s+(?<cardID>-?\\d+)\\s+" +

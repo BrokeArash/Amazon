@@ -26,6 +26,21 @@ abstract public class User {
         this.type = type;
     }
 
+    public static boolean isEmailUnique (String email) {
+        return User.getUserByEmail(email) == null;
+    }
+
+    public static User getUserByEmail(String email) {
+        for (User user : App.users) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+
+
     String password;
     String email;
     UserType type;

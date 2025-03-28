@@ -9,7 +9,7 @@ public class AppView{
     public void run() {
         Scanner scanner = new Scanner(System.in);
         do{
-            System.out.println(App.getCurrentMenu()); //TODO: delete later
+            //System.out.println(App.getCurrentMenu()); //TODO: delete later
             App.getCurrentMenu().checkCommand(scanner);
             /* Log In */
             if (App.getCurrentMenu() == Menu.LoginMenu && App.isLogInSuccessful()) {

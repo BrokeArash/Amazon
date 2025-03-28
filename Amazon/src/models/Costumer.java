@@ -1,11 +1,19 @@
 package models;
 
+import models.enums.UserType;
+
+import java.util.ArrayList;
+
 public class Costumer extends User{
 
     private String firstName;
     private String lastName;
     private String password;
     private String email;
+    public ArrayList<Order> orders = new ArrayList<>();
+    public ArrayList<Address> addresses = new ArrayList<>();
+    public ArrayList<Product> shoppingList = new ArrayList<>();
+    public ArrayList<Card> cards = new ArrayList<>();
 
     public Costumer(String firstName, String lastName, String password, String email) {
         this.firstName = firstName;
@@ -39,5 +47,95 @@ public class Costumer extends User{
             }
         }
         return null;
+    }
+    public static Order getOrderByID(int id, Costumer costumer) {
+        for (Order order : costumer.orders) {
+            if (order.getID() == id) {
+                return order;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isPostalUnique (String postal, Costumer user) {
+        return Costumer.getAddressByPostal(postal, user) == null;
+    }
+
+    public static Address getAddressByPostal(String postal, Costumer user) {
+        for (Address address : user.addresses) {
+            if (address.getPostal().equals(postal)) {
+                return address;
+            }
+        }
+        return null;
+    }
+
+    public static Address getAddressByID(int id, Costumer user) {
+        for (Address address : user.addresses) {
+            if (address.getId() == id) {
+                return address;
+            }
+        }
+        return null;
+    }
+
+    public static Card getCardByNumber(String number, Costumer mainUser) {
+        for (Card card : mainUser.cards) {
+            if (card.getCardNumber().equals(number)) {
+                return card;
+            }
+        }
+        return null;
+    }
+
+    public static Card getCardByID(int id, Costumer mainUser) {
+        for (Card card : mainUser.cards) {
+            if (card.getId() == id) {
+                return card;
+            }
+        }
+        return null;
+    }
+
+    public static Product getProductByID(int id, Costumer mainUser) {
+        for (Product product : mainUser.shoppingList) {
+            if (product.getID() == id) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+
+
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public UserType getType() {
+        return super.getType();
+    }
+
+    @Override
+    public void setType(UserType type) {
+        super.setType(type);
     }
 }

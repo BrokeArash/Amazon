@@ -4,6 +4,7 @@ import controllers.LoginMenuController;
 import models.App;
 import models.Result;
 import models.enums.LoginMenuCommands;
+import models.enums.Menu;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -78,6 +79,17 @@ public class LoginMenu implements AppMenu{
                     reEnterPassword = deleteAccount.group("reEnterPassword");
                     result = controller.deleteAccount(password, reEnterPassword);
                     System.out.println(result);
+                    break;
+                case GoToMenu:
+                    Matcher menuMatcher = LoginMenuCommands.GoToMenu.getMatcher(input);
+                    String menu = menuMatcher.group("menu");
+                    Menu selectedMenu = Menu.findMenu(menu);
+                    if (selectedMenu.equals(Menu.UserMenu) && App.getLoggedIn() == null) {
+                        System.out.println("You need to login as a user before accessing the user menu.");
+                    } else {
+                        App.setCurrentMenu(selectedMenu);
+                        System.out.println("Redirecting to the " + menu + " ...");
+                    }
                     break;
             }
         }

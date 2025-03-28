@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public enum ProductMenuCommands implements Command{
     ShowProducts("^\\s*show\\s+products\\s+" +
-            "-sortBy\\s+(rate|\\s*higher\\s+price\\s+to\\s+lower\\s*" +
+            "-sortBy\\s+(?<sortBy>rate|\\s*higher\\s+price\\s+to\\s+lower\\s*" +
             "|\\s*lower\\s+price\\s+to\\s+higher\\s*|\\s*number\\s+of\\s+sold\\s*)$"),
     ShowInformationProduct("^\\s*show\\s+information\\s+of\\s+-id\\s+(?<productId>-?\\d+)\\s*$"),
     RateProduct("^\\s*Rate\\s+product\\s+" +

@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public enum StoreMenuCommands implements Command{
     AddProduct("^\\s*add\\s+product\\s+" +
             "-n\\s+(?<name>\".*\")\\s+" +
-            "-pc\\s+(?<productCost>-?\\d+\\.\\d+|-?\\d+)\\s+" +
+            "-pc\\s+(?<producerCost>-?\\d+\\.\\d+|-?\\d+)\\s+" +
             "-p\\s+(?<price>-?\\d+\\.\\d+|-?\\d+)\\s+" +
             "-about\\s+(?<aboutThisItem>\".*\")\\s+" +
             "-np\\s+(?<numberOfProductsToSell>-?\\d+)\\s*$"),

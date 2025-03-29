@@ -12,7 +12,7 @@ public class StoreMenuController {
         } else {
             Product newProduct = new Product(mainUser.getBrandName(), 2.5F, numberOfProductsToSell, price, name, aboutThisItem);
             mainUser.products.add(newProduct);
-            return new Result(true, "Product \"" + name + "\" has been added successfully with ID " + newProduct.getID() +".");
+            return new Result(true, "Product " + name + " has been added successfully with ID " + newProduct.getID() +".");
         }
     }
 
@@ -41,25 +41,29 @@ public class StoreMenuController {
 
     public void showListOfProducts() {
         Store mainUser = (Store) App.getLoggedIn();
-        System.out.println("Store Products (Sorted by date added)  ");
-        System.out.println("------------------------------------------------");
-        for (Product product : mainUser.products) {
-            float newPrice = product.getPrice() - (product.getPrice() * product.getDiscount()/100);
-            if (product.getQuantity() == 0) {
-                System.out.printf("ID: %d  (**Sold out!**)\n", product.getID());
-            } else if (product.getDiscount() > 0) {
-                System.out.printf("ID: %d  **(On Sale! %d units discounted)**\n", product.getQuantity(), product.getNumberOfDiscounted());
-            } else {
-                System.out.println("ID: " + product.getID());
-            }
-            System.out.println("Name: " + product.getName());
-            if (product.getDiscount() > 0) {
-                System.out.printf("Price: ~$%.1f~ → $%.1f (-%.1f%)\n", product.getPrice(), newPrice, product.getDiscount());
-            }
-            System.out.println("Price: $" + product.getName());
-            System.out.println("Stock: " + product.getQuantity());
-            System.out.println("Sold:" + product.getNumberOfSold());
+        if (mainUser.products.isEmpty()) {
+            System.out.println("No products available in the store.");
+        } else {
+            System.out.println("Store Products (Sorted by date added)  ");
             System.out.println("------------------------------------------------");
+            for (Product product : mainUser.products) {
+                float newPrice = product.getPrice() - (product.getPrice() * product.getDiscount() / 100);
+                if (product.getQuantity() == 0) {
+                    System.out.printf("ID: %d  (**Sold out!**)\n", product.getID());
+                } else if (product.getDiscount() > 0) {
+                    System.out.printf("ID: %d  **(On Sale! %d units discounted)**\n", product.getQuantity(), product.getNumberOfDiscounted());
+                } else {
+                    System.out.println("ID: " + product.getID());
+                }
+                System.out.println("Name: " + product.getName());
+                if (product.getDiscount() > 0) {
+                    System.out.printf("Price: ~$%.1f~ → $%.1f (-%.1f%)\n", product.getPrice(), newPrice, product.getDiscount());
+                }
+                System.out.println("Price: $" + product.getName());
+                System.out.println("Stock: " + product.getQuantity());
+                System.out.println("Sold:" + product.getNumberOfSold());
+                System.out.println("------------------------------------------------");
+            }
         }
     }
 

@@ -30,13 +30,13 @@ public class ProductMenu implements AppMenu{
         }
 
         switch (matchedCommand) {
-            case ShowProducts:
-                Matcher showProductsMatcher = ProductMenuCommands.ShowProducts.getMatcher(input);
-                String sortBy = showProductsMatcher.group("sortBy");
-                sortBy.replaceAll(" ", "");
-                Result result = controller.showProducts(sortBy.trim());
-                System.out.println(result);
-                break;
+//            case ShowProducts:
+//                Matcher showProductsMatcher = ProductMenuCommands.ShowProducts.getMatcher(input);
+//                String sortBy = showProductsMatcher.group("sortBy");
+//                sortBy.replaceAll(" ", "");
+//                Result result = controller.showProducts(sortBy.trim(), scanner);
+//                System.out.println(result);
+//                break;
             case ShowInformationProduct:
                 Matcher showInformationProductMatcher = ProductMenuCommands.ShowInformationProduct.getMatcher(input);
                 int productID = Integer.parseInt(showInformationProductMatcher.group("productId"));
@@ -52,7 +52,7 @@ public class ProductMenu implements AppMenu{
                     message = null;
                 }
                 productID = Integer.parseInt(rateProductMatcher.group("id"));
-                result = controller.rateMessage(number, message, productID);
+                Result result = controller.rateMessage(number, message, productID);
                 System.out.println(result);
                 break;
             case AddToCart:

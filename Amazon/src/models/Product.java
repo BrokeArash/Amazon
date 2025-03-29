@@ -12,7 +12,7 @@ public class Product{
     private int discount = 0;
     private int numberOfDiscounted = 0;
     private String ATI;
-    private static int lastAssigned = 10;
+    private static int lastAssigned = 100;
     private int numberOfSold = 0;
 
     public HashMap <String, Float> ratings = new HashMap<>();

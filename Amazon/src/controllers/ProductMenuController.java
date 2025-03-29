@@ -4,14 +4,84 @@ import models.App;
 import models.Costumer;
 import models.Product;
 import models.Result;
+import models.enums.ProductMenuCommands;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class ProductMenuController {
-    public Result showProducts(String sortBy) {
-        if (sortBy.equals("rate")) {
 
-        }
-        return new Result(true, ""); //TODO:
-    }
+//    private int currentStartIndex = 0;
+//    private static final int PAGE_SIZE = 10;
+//    private List<Product> currentDisplayList;
+//
+//    public Result showProducts(String sortBy, Scanner scanner) {
+//        Costumer mainUser = (Costumer) App.getLoggedIn();
+//        if (sortBy.equals("rate")) {
+//        mainUser.shoppingList.sort(Comparator.comparing(Product::getRating).reversed());
+//        } else if (sortBy.equals("higherpricetolower")) {
+//            mainUser.shoppingList.sort(Comparator.comparing(Product::getPrice).reversed());
+//        } else if (sortBy.equals("lowerpricetohigher")) {
+//            mainUser.shoppingList.sort(Comparator.comparing(Product::getPrice));
+//        } else if (sortBy.equals("numberofsold")) {
+//            mainUser.shoppingList.sort(Comparator.comparing(Product::getNumberOfSold).reversed());
+//        }
+//
+//        currentDisplayList = mainUser.shoppingList;
+//        currentStartIndex = 0;
+//
+//        displayCurrentPage(sortBy);
+//        while (true) {
+//            String input = scanner.nextLine();
+//
+//            if (ProductMenuCommands.ShowNext.getMatcher(input).matches()) {
+//                showNextPage();
+//            } else if (ProductMenuCommands.ShowPast.getMatcher(input).matches()) {
+//                showPreviousPage();
+//            } else {
+//                break;
+//            }
+//        }
+//
+//        return new Result(true, "");
+//    }
+//    private void displayCurrentPage(String sortBy) {
+//        int endIndex = Math.min(currentStartIndex + PAGE_SIZE, currentDisplayList.size());
+//        List<Product> currentPage = currentDisplayList.subList(currentStartIndex, endIndex);
+//
+//        System.out.println("Product List (Sorted by: Rate)  \n");
+//        System.out.println("------------------------------------------------");
+//
+//        for (int i = 0; i < currentPage.size(); i++) {
+//            Product product = currentPage.get(i);
+//            System.out.println((currentStartIndex + i + 1) + ". " + product.getName() +
+//                    " | Price: " + product.getPrice() +
+//                    " | Rating: " + product.getRating());
+//        }
+//
+//        System.out.println("\nCommands: 'show next', 'show past', 'exit'");
+//    }
+//
+//    private void showNextPage() {
+//        if (currentStartIndex + PAGE_SIZE < currentDisplayList.size()) {
+//            currentStartIndex += PAGE_SIZE;
+//            displayCurrentPage();
+//        } else {
+//            System.out.println("You've reached the end of the list.");
+//        }
+//    }
+//
+//    private void showPreviousPage() {
+//        if (currentStartIndex - PAGE_SIZE >= 0) {
+//            currentStartIndex -= PAGE_SIZE;
+//            displayCurrentPage();
+//        } else {
+//            System.out.println("You're already at the beginning of the list.");
+//        }
+//    }
+
 
 
     public void showInformationProduct(int productID) {
@@ -40,13 +110,13 @@ public class ProductMenuController {
             System.out.println("Brand: " + product.getBrand());
             System.out.println("Number of Products Remaining: " + product.getQuantity());
             System.out.println("About this item:  ");
-            System.out.println(); //TODO
+            System.out.println(product.getATI());
             System.out.println();
             System.out.println("Customer Reviews:  ");
             System.out.println("------------------------------------------------");
-            for (int i = 0; i < product.getRating(); i++) { //TODO:
-
-            }
+            product.ratings.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEach(entry -> System.out.printf("%s\n" +
+                    "------------------------------------------------\n",
+                    entry.getKey()));
         }
     }
 

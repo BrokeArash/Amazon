@@ -4,6 +4,7 @@ import models.*;
 import models.enums.CostumerMenuCommands;
 import models.enums.LoginMenuCommands;
 
+import java.util.Comparator;
 import java.util.regex.Matcher;
 
 public class CostumerMenuController {
@@ -23,7 +24,8 @@ public class CostumerMenuController {
             System.out.println("Total Items Ordered: " + order.getTIO());
             System.out.println();
             System.out.println("Products (Sorted by Name):");
-            for (int i = 0; i < order.getTIO(); i++) { //TODO: sort by name
+            order.products.sort(Comparator.comparing(Product::getName));
+            for (int i = 0; i < order.getTIO(); i++) { //TODO: sort by name //
                 System.out.println(i+"- " + order.products.get(i));
             }
             System.out.println();

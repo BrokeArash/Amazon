@@ -7,6 +7,8 @@ public enum ProductMenuCommands implements Command{
     ShowProducts("^\\s*show\\s+products\\s+" +
             "-sortBy\\s+(?<sortBy>rate|\\s*higher\\s+price\\s+to\\s+lower\\s*" +
             "|\\s*lower\\s+price\\s+to\\s+higher\\s*|\\s*number\\s+of\\s+sold\\s*)$"),
+    ShowNext("^\\s*show\\s+next\\s+10\\s+products\\s*$"),
+    ShowPast("^\\s*show\\s+past\\s+10\\s+products\\s*$"),
     ShowInformationProduct("^\\s*show\\s+information\\s+of\\s+-id\\s+(?<productId>-?\\d+)\\s*$"),
     RateProduct("^\\s*Rate\\s+product\\s+" +
             "-r\\s+(?<number>-?\\d+)" +

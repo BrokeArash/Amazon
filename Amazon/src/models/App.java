@@ -9,6 +9,7 @@ public class App {
     public static ArrayList<User> users = new ArrayList<>();
     public static ArrayList<Costumer> costumers = new ArrayList<>();
     public static ArrayList<Store> stores = new ArrayList<>();
+    public static ArrayList<Product> products = new ArrayList<>();
     private static User loggedIn = null;
     private static UserType loggedInType = null;
     private static Menu currentMenu = Menu.MainMenu;

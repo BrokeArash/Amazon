@@ -37,7 +37,6 @@ public enum CostumerMenuCommands implements Command{
             "-product\\s+(?<productID>-?\\d+)\\s+" +
             "-quantity\\s+(?<amount>-?\\d+)\\s*$"),
     Back("^\\s*go\\s+back\\s*$"),
-    GoToMenu("^\\s*go\\s+to\\s+-m\\s+(?<menu>\\S+)\\s*$"),
     CheckPostal("^\\d{10}$"),
     CheckCardNumber("^\\d{16}$"),
     CheckDate("^(0[1-9]|1[0-2])\\/\\d{2}$"),

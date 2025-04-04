@@ -80,17 +80,6 @@ public class LoginMenu implements AppMenu{
                     result = controller.deleteAccount(password, reEnterPassword);
                     System.out.println(result);
                     break;
-                case GoToMenu:
-                    Matcher menuMatcher = LoginMenuCommands.GoToMenu.getMatcher(input);
-                    String menu = menuMatcher.group("menu");
-                    Menu selectedMenu = Menu.findMenu(menu);
-                    if (selectedMenu.equals(Menu.UserMenu) && App.getLoggedIn() == null) {
-                        System.out.println("You need to login as a user before accessing the user menu.");
-                    } else {
-                        App.setCurrentMenu(selectedMenu);
-                        System.out.println("Redirecting to the " + menu + " ...");
-                    }
-                    break;
             }
         }
 

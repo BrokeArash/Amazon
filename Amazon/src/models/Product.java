@@ -8,16 +8,17 @@ public class Product{
     private String name;
     private float rating;
     private int quantity;
-    private float price;
+    private double price;
     private int discount = 0;
     private int numberOfDiscounted = 0;
     private String ATI;
-    private static int lastAssigned = 10;
+    private static int lastAssigned = 100;
     private int numberOfSold = 0;
 
-    public HashMap <String, Float> ratings = new HashMap<>();
 
-    public Product(String brand, float rating, int quantity, float price, String name, String ati) {
+    public HashMap <String, HashMap<String, Float>> ratings = new HashMap<>();
+
+    public Product(String brand, float rating, int quantity, double price, String name, String ati) {
         this.brand = brand;
         this.ID = ++lastAssigned;
         this.name = name;
@@ -48,7 +49,7 @@ public class Product{
         return quantity;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -64,7 +65,7 @@ public class Product{
         this.quantity -= quantity;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -110,5 +111,9 @@ public class Product{
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public double getDiscountPrice() {
+        return getPrice() - (getPrice() * (float) (getDiscount()) / 100);
     }
 }

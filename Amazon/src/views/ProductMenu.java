@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 
 public class ProductMenu implements AppMenu{
     final ProductMenuController controller = new ProductMenuController();
-
+    String mainSortBy;
     @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
@@ -33,9 +33,15 @@ public class ProductMenu implements AppMenu{
             case ShowProducts:
                 Matcher showProductsMatcher = ProductMenuCommands.ShowProducts.getMatcher(input);
                 String sortBy = showProductsMatcher.group("sortBy");
+                mainSortBy = sortBy;
                 sortBy.replaceAll(" ", "");
-                Result result = controller.showProducts(sortBy.trim());
-                System.out.println(result);
+                controller.showProducts(sortBy.trim(), mainSortBy);
+                break;
+            case ShowNext:
+                controller.showNext(mainSortBy);
+                break;
+            case ShowPast:
+                controller.showPast(mainSortBy);
                 break;
             case ShowInformationProduct:
                 Matcher showInformationProductMatcher = ProductMenuCommands.ShowInformationProduct.getMatcher(input);
@@ -52,7 +58,7 @@ public class ProductMenu implements AppMenu{
                     message = null;
                 }
                 productID = Integer.parseInt(rateProductMatcher.group("id"));
-                result = controller.rateMessage(number, message, productID);
+                Result result = controller.rateMessage(number, message, productID);
                 System.out.println(result);
                 break;
             case AddToCart:
@@ -64,13 +70,6 @@ public class ProductMenu implements AppMenu{
                 break;
             case Back:
                 System.out.println(controller.back());
-                break;
-            case GoToMenu:
-                Matcher menuMatcher = ProductMenuCommands.GoToMenu.getMatcher(input);
-                String menu = menuMatcher.group("menu");
-                Menu selectedMenu = Menu.findMenu(menu);
-                App.setCurrentMenu(selectedMenu);
-                System.out.println("Redirecting to the " + menu + " ...");
                 break;
         }
     }

@@ -93,7 +93,7 @@ public class CostumerMenu implements AppMenu {
                     String cardNumber = addCardMatcher.group("cardNumber");
                     String expirationDate = addCardMatcher.group("expirationDate");
                     String cvv = addCardMatcher.group("cvv");
-                    int value = Integer.parseInt(addCardMatcher.group("initialValue"));
+                    float value = Float.parseFloat(addCardMatcher.group("initialValue"));
                     result = controller.addCard(cardNumber, expirationDate, cvv, value);
                     System.out.println(result);
                     break;
@@ -129,13 +129,6 @@ public class CostumerMenu implements AppMenu {
                     break;
                 case Back:
                     System.out.println(controller.back());
-                    break;
-                case GoToMenu:
-                    Matcher menuMatcher = CostumerMenuCommands.GoToMenu.getMatcher(input);
-                    String menu = menuMatcher.group("menu");
-                    Menu selectedMenu = Menu.findMenu(menu);
-                    App.setCurrentMenu(selectedMenu);
-                    System.out.println("Redirecting to the " + menu + " ...");
                     break;
             }
         }

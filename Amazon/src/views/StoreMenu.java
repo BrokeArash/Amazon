@@ -34,8 +34,8 @@ public class StoreMenu implements AppMenu{
                 case AddProduct:
                     Matcher addProductMatcher = StoreMenuCommands.AddProduct.getMatcher(input);
                     String name = addProductMatcher.group("name");
-                    float producerCost = Float.parseFloat(addProductMatcher.group("producerCost"));
-                    float price = Float.parseFloat(addProductMatcher.group("price"));
+                    double producerCost = Double.parseDouble(addProductMatcher.group("producerCost"));
+                    double price = Double.parseDouble((addProductMatcher.group("price")));
                     String aboutThisItem = addProductMatcher.group("aboutThisItem");
                     int numberOfProductsToSell = Integer.parseInt(addProductMatcher.group("numberOfProductsToSell"));
                     Result result = controller.addProduct(name, producerCost, price, aboutThisItem, numberOfProductsToSell);
@@ -71,13 +71,6 @@ public class StoreMenu implements AppMenu{
                     break;
                 case Back:
                     System.out.println(controller.back());
-                    break;
-                case GoToMenu:
-                    Matcher menuMatcher = ProductMenuCommands.GoToMenu.getMatcher(input);
-                    String menu = menuMatcher.group("menu");
-                    Menu selectedMenu = Menu.findMenu(menu);
-                    App.setCurrentMenu(selectedMenu);
-                    System.out.println("Redirecting to the " + menu + " ...");
                     break;
             }
         }

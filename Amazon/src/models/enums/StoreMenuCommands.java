@@ -22,8 +22,7 @@ public enum StoreMenuCommands implements Command{
     UpdatePrice("^\\s*update\\s+price\\s+" +
             "-product\\s+(?<productId>-?\\d+)\\s+" +
             "-price\\s+(?<newPrice>\\d+.?\\d+)\\s*$"),
-    Back("^\\s*go\\s*back\\s*$"),
-    GoToMenu("^\\s*go\\s+to\\s+-m\\s+(?<menu>\\S+)\\s*$");
+    Back("^\\s*go\\s*back\\s*$");
 
     private final String pattern;
 

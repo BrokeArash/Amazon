@@ -3,7 +3,7 @@ package controllers;
 import models.*;
 
 public class StoreMenuController {
-    public Result addProduct(String name, float producerCost, float price, String aboutThisItem, int numberOfProductsToSell) {
+    public Result addProduct(String name, double producerCost, double price, String aboutThisItem, int numberOfProductsToSell) {
         Store mainUser = (Store) App.getLoggedIn();
         if (producerCost > price) {
             return new Result(false, "Selling price must be greater than or equal to the producer cost.");
@@ -12,7 +12,8 @@ public class StoreMenuController {
         } else {
             Product newProduct = new Product(mainUser.getBrandName(), 2.5F, numberOfProductsToSell, price, name, aboutThisItem);
             mainUser.products.add(newProduct);
-            return new Result(true, "Product \"" + name + "\" has been added successfully with ID " + newProduct.getID() +".");
+            App.products.add(newProduct);
+            return new Result(true, "Product " + name + " has been added successfully with ID " + newProduct.getID() +".");
         }
     }
 
@@ -36,7 +37,7 @@ public class StoreMenuController {
         Store mainUser = (Store) App.getLoggedIn();
         float totalProfit = mainUser.getRevenue() - mainUser.getCosts();
         System.out.println("Total Profit: $" + totalProfit);
-        System.out.printf("(Revenue: $%.1f - Costs: $%.1f)\n", mainUser.getRevenue(), mainUser.getCosts());
+        System.out.printf("(Revenue: $%.1f - Costs: $%.1f)\n", mainUser.getRevenue(), mainUser.getCosts()); //TODO: double
     }
 
     public void showListOfProducts() {
@@ -44,19 +45,20 @@ public class StoreMenuController {
         System.out.println("Store Products (Sorted by date added)  ");
         System.out.println("------------------------------------------------");
         for (Product product : mainUser.products) {
-            float newPrice = product.getPrice() - (product.getPrice() * product.getDiscount()/100);
+            double newPrice = product.getDiscountPrice();
             if (product.getQuantity() == 0) {
                 System.out.printf("ID: %d  (**Sold out!**)\n", product.getID());
             } else if (product.getDiscount() > 0) {
-                System.out.printf("ID: %d  **(On Sale! %d units discounted)**\n", product.getQuantity(), product.getNumberOfDiscounted());
+                System.out.printf("ID: %d  **(On Sale! %d units discounted)**\n",product.getID(), product.getNumberOfDiscounted());
             } else {
                 System.out.println("ID: " + product.getID());
             }
-            System.out.println("Name: " + product.getName());
+            System.out.println("Name: " + product.getName().substring(1, product.getName().length()-1));
             if (product.getDiscount() > 0) {
-                System.out.printf("Price: ~$%.1f~ → $%.1f (-%.1f%)\n", product.getPrice(), newPrice, product.getDiscount());
+                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getPrice(), newPrice, product.getDiscount());
+            } else {
+                System.out.printf("Price: $%.1f\n", product.getPrice());
             }
-            System.out.println("Price: $" + product.getName());
             System.out.println("Stock: " + product.getQuantity());
             System.out.println("Sold:" + product.getNumberOfSold());
             System.out.println("------------------------------------------------");
@@ -72,11 +74,11 @@ public class StoreMenuController {
             return new Result(false, "Amount must be a positive number.");
         } else {
             product.addQuantity(amount);
-            return new Result(true, amount + " units of \"" + product.getName() + "\" have been added to the stock.");
+            return new Result(true, amount + " units of " + product.getName() + " have been added to the stock.");
         }
     }
 
-    public Result updatePrice(int productId, float newPrice) {
+    public Result updatePrice(int productId, double newPrice) {
         Store mainUser = (Store) App.getLoggedIn();
         Product product = Store.getProductByID(productId, mainUser);
         if (product == null) {
@@ -85,7 +87,7 @@ public class StoreMenuController {
             return new Result(false, "Price must be a positive number.");
         } else {
             product.setPrice(newPrice);
-            return new Result(true, "Price of \"" + product.getName() + "\" has been updated to $" + newPrice + ".");
+            return new Result(true, "Price of " + product.getName() + " has been updated to $" + newPrice + ".");
         }
     }
 

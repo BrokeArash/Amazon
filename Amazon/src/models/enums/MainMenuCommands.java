@@ -9,6 +9,9 @@ public enum MainMenuCommands implements Command {
     Exit("^\\s*exit\\s*$");
 
 
+    
+
+
     private final String pattern;
 
     MainMenuCommands(String pattern) {

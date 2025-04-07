@@ -52,10 +52,11 @@ public class LoginMenuController {
         } else if (!User.isEmailUnique(email)) {
             return new Result(false, "Email already exists.");
         } else {
+            brand = brand.substring(1, brand.length() - 1);
             User newStore = new Store(brand, password, email);
             App.users.add(newStore);
             App.stores.add((Store) newStore);
-            return new Result(true, "Store account for " + brand + " created successfully.");
+            return new Result(true, "Store account for \"" + brand + "\" created successfully.");
         }
     }
 

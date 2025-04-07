@@ -7,7 +7,6 @@ import java.util.*;
 public class ProductMenuController {
     public static int pageNum;
     public static ArrayList<Product> products = new ArrayList<>();
-
     public void showProducts(String sortBy, String mainSortBy) {
         products.clear();
         products.addAll(App.products);
@@ -38,14 +37,14 @@ public class ProductMenuController {
             } else {
                 System.out.printf("ID: %d\n", currentProduct.getID());
             }
-            System.out.printf("Name: %s\n", currentProduct.getName().substring(1, mainSortBy.length()-3));
+            System.out.printf("Name: %s\n", currentProduct.getName());
             System.out.printf("Rate: %.1f/5\n", currentProduct.getRating());
             if (currentProduct.getNumberOfDiscounted() > 0) {
                 System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", currentProduct.getPrice(), currentProduct.getDiscountPrice(), currentProduct.getDiscount());
             } else {
                 System.out.printf("Price: $%.1f\n", currentProduct.getPrice());
             }
-            System.out.printf("Brand: %s\n", currentProduct.getBrand().substring(1, currentProduct.getBrand().length()-1));
+            System.out.printf("Brand: %s\n", currentProduct.getBrand());
             System.out.printf("Stock: %d\n", currentProduct.getQuantity());
             System.out.println("------------------------------------------------");
         }
@@ -157,10 +156,11 @@ public class ProductMenuController {
             return new Result(false, "No product found.");
         } else if (amount > product.getDiscount()) {
             System.out.printf("Only %d units of \"%s\" are available.\n", product.getQuantity(), product.getName());
+            return new Result(false, "");
         }
         product.addQuantity(-amount);
         mainUser.shoppingList.add(product);
-        return new Result(true, "\"<productName>\" (x<amount>) has been added to your cart.");
+        return new Result(true, "\"" + product.getName() + "\" (x<" + amount + ">) has been added to your cart.");
     }
 
     public Result back() {

@@ -33,10 +33,12 @@ public class StoreMenu implements AppMenu{
             switch (matchedCommand) {
                 case AddProduct:
                     Matcher addProductMatcher = StoreMenuCommands.AddProduct.getMatcher(input);
-                    String name = addProductMatcher.group("name");
+                    String name = addProductMatcher.group("name").trim();
+                    name = name.substring(1, name.length()-1);
                     double producerCost = Double.parseDouble(addProductMatcher.group("producerCost"));
                     double price = Double.parseDouble((addProductMatcher.group("price")));
                     String aboutThisItem = addProductMatcher.group("aboutThisItem");
+                    aboutThisItem = aboutThisItem.substring(1, aboutThisItem.length()-1);
                     int numberOfProductsToSell = Integer.parseInt(addProductMatcher.group("numberOfProductsToSell"));
                     Result result = controller.addProduct(name, producerCost, price, aboutThisItem, numberOfProductsToSell);
                     System.out.println(result);

@@ -34,7 +34,7 @@ public class ProductMenu implements AppMenu{
                 Matcher showProductsMatcher = ProductMenuCommands.ShowProducts.getMatcher(input);
                 String sortBy = showProductsMatcher.group("sortBy");
                 mainSortBy = sortBy;
-                sortBy.replaceAll(" ", "");
+                sortBy = sortBy.replaceAll(" ", "");
                 controller.showProducts(sortBy.trim(), mainSortBy);
                 break;
             case ShowNext:

@@ -8,8 +8,8 @@ public class Address {
     private String postal;
     private static int lastAssigned = 0;
 
-    public Address(String street, String city, String country, String postal) {
-        this.id = ++lastAssigned;
+    public Address(int id, String street, String city, String country, String postal) {
+        this.id = id;
         this.street = street;
         this.city = city;
         this.country = country;

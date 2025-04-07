@@ -13,7 +13,7 @@ public class StoreMenuController {
             Product newProduct = new Product(mainUser.getBrandName(), 2.5F, numberOfProductsToSell, price, name, aboutThisItem);
             mainUser.products.add(newProduct);
             App.products.add(newProduct);
-            return new Result(true, "Product " + name + " has been added successfully with ID " + newProduct.getID() +".");
+            return new Result(true, "Product \"" + name + "\" has been added successfully with ID " + newProduct.getID() +".");
         }
     }
 
@@ -36,7 +36,7 @@ public class StoreMenuController {
     public void showProfit() {
         Store mainUser = (Store) App.getLoggedIn();
         float totalProfit = mainUser.getRevenue() - mainUser.getCosts();
-        System.out.println("Total Profit: $" + totalProfit);
+        System.out.println("Total Profit: $" + totalProfit); //TODO:
         System.out.printf("(Revenue: $%.1f - Costs: $%.1f)\n", mainUser.getRevenue(), mainUser.getCosts()); //TODO: double
     }
 
@@ -57,7 +57,7 @@ public class StoreMenuController {
             } else {
                 System.out.println("ID: " + product.getID());
             }
-            System.out.println("Name: " + product.getName().substring(1, product.getName().length()-1));
+            System.out.println("Name: " + product.getName());
             if (product.getDiscount() > 0) {
                 System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getPrice(), newPrice, product.getDiscount());
             } else {
@@ -78,7 +78,7 @@ public class StoreMenuController {
             return new Result(false, "Amount must be a positive number.");
         } else {
             product.addQuantity(amount);
-            return new Result(true, amount + " units of " + product.getName() + " have been added to the stock.");
+            return new Result(true, amount + " units of \"" + product.getName() + "\" have been added to the stock.");
         }
     }
 
@@ -91,7 +91,7 @@ public class StoreMenuController {
             return new Result(false, "Price must be a positive number.");
         } else {
             product.setPrice(newPrice);
-            return new Result(true, "Price of " + product.getName() + " has been updated to $" + newPrice + ".");
+            return new Result(true, "Price of \"" + product.getName() + "\" has been updated to $" + newPrice + ".");
         }
     }
 

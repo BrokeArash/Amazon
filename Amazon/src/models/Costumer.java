@@ -14,6 +14,7 @@ public class Costumer extends User{
     public ArrayList<Address> addresses = new ArrayList<>();
     public ArrayList<Product> shoppingList = new ArrayList<>();
     public ArrayList<Card> cards = new ArrayList<>();
+    private int lastAddressId = 0;
 
     public Costumer(String firstName, String lastName, String password, String email) {
         this.firstName = firstName;
@@ -21,6 +22,11 @@ public class Costumer extends User{
         this.password = password;
         this.email = email;
     }
+
+    public int getNextAddressId() {
+        return ++lastAddressId;
+    }
+
 
     public String getFirstName() {
         return firstName;

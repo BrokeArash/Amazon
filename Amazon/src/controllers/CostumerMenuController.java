@@ -135,7 +135,8 @@ public class CostumerMenuController {
         } else if (!Costumer.isPostalUnique(postal, mainUser)) {
             return new Result(false, "This postal code is already associated with an existing address.");
         } else {
-            Address newAddress = new Address(street, city, country, postal);
+            int newId = mainUser.getNextAddressId();
+            Address newAddress = new Address(newId, street, city, country, postal);
             mainUser.addresses.add(newAddress);
             return new Result(true, "Address successfully added with id " + newAddress.getId() + ".");
         }

@@ -4,7 +4,7 @@ import models.*;
 import models.enums.CostumerMenuCommands;
 import models.enums.LoginMenuCommands;
 
-import java.util.Comparator;
+import java.util.*;
 import java.util.regex.Matcher;
 
 public class CostumerMenuController {
@@ -24,9 +24,8 @@ public class CostumerMenuController {
             System.out.println("Total Items Ordered: " + order.getTIO());
             System.out.println();
             System.out.println("Products (Sorted by Name):");
-            order.products.sort(Comparator.comparing(Product::getName));
-            for (int i = 0; i < order.getTIO(); i++) { //TODO: sort by name
-                System.out.println(i+"- " + order.products.get(i));
+            for (int i = 0; i < order.products.size(); i++) { //TODO: sort by name
+                System.out.println((i+1) + "- " + order.products.get(i).getName());
             }
             System.out.println();
             System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━  ");
@@ -49,7 +48,8 @@ public class CostumerMenuController {
         }
         System.out.println("Products in this order:  ");
         System.out.println();
-        for (int i = 0; i < order.products.size(); i++) {
+        System.out.println(order.getTIO()); //temp
+        for (int i = 0; i < order.getTIO(); i++) {
             System.out.println(i + "- Product Name: " + order.products.get(i).getBrand());
             System.out.println("    ID: " + order.products.get(i).getID());
             System.out.println("    Brand: " + order.products.get(i).getBrand());
@@ -190,7 +190,8 @@ public class CostumerMenuController {
         } else if (Costumer.getCardByNumber(cardNumber, mainUser) != null) {
             return new Result(false, "This card is already saved in your account.");
         } else {
-            Card newCard = new Card(cardNumber, expirationDate, cvv, value);
+            int newId = mainUser.getNextCardId();
+            Card newCard = new Card(newId, cardNumber, expirationDate, cvv, value);
             mainUser.cards.add(newCard);
             return new Result(true, "Credit card with Id " + newCard.getId() + " has been added successfully.");
         }
@@ -205,7 +206,8 @@ public class CostumerMenuController {
             return new Result(false, "No credit card found.");
         } else {
             card.addValue(amount);
-            return new Result(true, "$" + amount + " has been added to the credit card " + card.getId() + ". New balance: $" + card.getValue() + ".");
+            System.out.printf("$%.1f has been added to the credit card %d. New balance: $%.1f.", amount, card.getId(), card.getValue());
+            return new Result(true, "");
         }
     }
 
@@ -216,7 +218,8 @@ public class CostumerMenuController {
         if (card == null) {
             return new Result(false, "No credit card found.");
         } else {
-            return new Result(true, "Current balance : $" + card.getValue());
+            System.out.printf("Current balance : $%.1f", card.getValue());
+            return new Result(true, "");
         }
     }
 
@@ -228,12 +231,13 @@ public class CostumerMenuController {
         } else {
             System.out.println("Your Shopping Cart:");
             System.out.println("------------------------------------");
+            Collections.sort(mainUser.shoppingList, Comparator.comparing(Product::getName));
             for (Product product : mainUser.shoppingList) {
                 System.out.println("Product ID  : " + product.getID());
                 System.out.println("Name        : " + product.getName());
                 System.out.println("Quantity    : " + product.getQuantity());
-                System.out.println("Price       : $" + product.getPrice() + " (each)");
-                System.out.println("Total Price : $" + product.getPrice() * product.getQuantity());
+                System.out.printf("Price       : $%.1f (each)\n",  product.getBasePrice());
+                System.out.printf("Total Price : $%.1f\n", product.getBasePrice() * product.getQuantity());
                 System.out.println("Brand       : " + product.getBrand());
                 System.out.printf("Rating      : %.1f/5\n", product.getRating());
                 System.out.println("------------------------------------");
@@ -245,9 +249,13 @@ public class CostumerMenuController {
         Costumer mainUser = (Costumer) App.getLoggedIn();
         Card card = Costumer.getCardByID(cardID, mainUser);
         Address address = Costumer.getAddressByID(addressID, mainUser);
+        HashMap<Store, Double> storeTemp = new HashMap<>();
         float sum = 0;
         for (Product product : mainUser.shoppingList) {
-            sum += product.getQuantity() * product.getPrice();
+            Store thisStore = Store.getStoreByBrand(product.getBrand());
+            double total = product.getQuantity() * product.getBasePrice();
+            sum += total;
+            storeTemp.merge(thisStore, total, Double::sum);
         }
         if (mainUser.shoppingList.isEmpty()) {
             return new Result(false, "Your shopping cart is empty.");
@@ -258,10 +266,17 @@ public class CostumerMenuController {
         } else if (card.getValue() < sum) {
             return new Result(false, "Insufficient balance in the selected card.");
         }  else {
-            Order newOrder = new Order(mainUser.orders.size() + 1, address, mainUser.shoppingList.size(), mainUser.shoppingList);
+            card.addValue(-sum);
+            int TIO = 0;
+            for (Product product : mainUser.shoppingList) {
+                TIO += product.getQuantity();
+            }
+            Order newOrder = new Order(mainUser.orders.size() + 101, address, TIO, mainUser.shoppingList);
             mainUser.orders.add(newOrder);
-            String message = "Order has been placed successfully!\nOrder ID: " + newOrder.getID() + "\nTotal Paid: $" + sum + "\nShipping to: " + newOrder.getAddress();
-            return new Result(true, message);
+            storeTemp.forEach((store, revenue) -> store.addRevenue(revenue));
+            mainUser.shoppingList.clear();
+            System.out.printf("Order has been placed successfully!\nOrder ID: %d\nTotal Paid: $%.1f\nShipping to: %s\n", newOrder.getID(), sum, newOrder.getAddress());
+            return new Result(true, "");
         }
     }
 

@@ -1,6 +1,8 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Order {
     private int ID;
@@ -8,10 +10,11 @@ public class Order {
     private int TIO;
     public ArrayList<Product> products = new ArrayList<>();
 
-    public Order(int ID, Address address, int TIO, ArrayList<Product> products) {
+    public Order(int ID, Address address, int TIO, ArrayList products) {
         this.ID = ID;
         Address = address;
         this.TIO = TIO;
+        this.products.addAll(products);
     }
 
     public int getID() {
@@ -21,8 +24,9 @@ public class Order {
         this.ID = ID;
     }
 
-    public Address getAddress() {
-        return Address;
+    public String getAddress() {
+        String address = this.Address.getStreet() + ", " + this.Address.getCity() +", " + this.Address.getCountry();
+        return address;
     }
     public void setAddress(Address address) {
         Address = address;

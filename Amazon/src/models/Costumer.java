@@ -1,5 +1,6 @@
 package models;
 
+import controllers.StoreMenuController;
 import models.enums.UserType;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Costumer extends User{
     public ArrayList<Product> shoppingList = new ArrayList<>();
     public ArrayList<Card> cards = new ArrayList<>();
     private int lastAddressId = 0;
+    private int lastCardId = 0;
 
     public Costumer(String firstName, String lastName, String password, String email) {
         this.firstName = firstName;
@@ -25,6 +27,10 @@ public class Costumer extends User{
 
     public int getNextAddressId() {
         return ++lastAddressId;
+    }
+
+    public int getNextCardId() {
+        return ++lastCardId;
     }
 
 
@@ -110,6 +116,14 @@ public class Costumer extends User{
             }
         }
         return null;
+    }
+
+    public void Cancel () {
+        StoreMenuController controller = new StoreMenuController();
+        for (Product product : this.shoppingList) {
+            Store thisStore = Store.getStoreByBrand(product.getBrand());
+            controller.addStock(product.getID(), product.getNumberOfSold());
+        }
     }
 
 

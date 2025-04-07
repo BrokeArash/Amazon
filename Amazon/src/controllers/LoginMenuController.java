@@ -93,6 +93,7 @@ public class LoginMenuController {
             return new Result(false, "You should login first.");
         } else {
             App.setLoggedIn(null);
+            App.setLoggedInType(null);
             App.setLogOutRequested(true);
             return new Result(true, "Logged out successfully. Redirecting to the MainMenu ...");
         }
@@ -114,11 +115,20 @@ public class LoginMenuController {
         } else {
             App.users.remove(App.getLoggedIn());
             if (App.getLoggedInType().equals(UserType.Costumer)) {
-                App.costumers.remove(App.getLoggedIn());
+                Costumer thisCostumer = (Costumer) App.getLoggedIn();
+                App.costumers.remove(thisCostumer);
+                thisCostumer.Cancel();
+                thisCostumer.shoppingList.clear();
+
             } else {
-                App.stores.remove(App.getLoggedIn());
+                Store thisStore = (Store) App.getLoggedIn();
+                App.stores.remove(thisStore);
+                thisStore.products.clear();
+                thisStore.deleteStore();
             }
             App.setDeleteRequested(true);
+            App.setLoggedIn(null);
+            App.setLoggedInType(null);
             return new Result(true, "Account deleted successfully. Redirecting to the MainMenu ...");
 
         }

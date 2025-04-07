@@ -6,7 +6,6 @@ public class Address {
     private String city;
     private String country;
     private String postal;
-    private static int lastAssigned = 0;
 
     public Address(int id, String street, String city, String country, String postal) {
         this.id = id;

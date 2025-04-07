@@ -3,6 +3,7 @@ package views;
 import models.App;
 import models.enums.MainMenuCommands;
 import models.enums.Menu;
+import models.enums.UserType;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -28,8 +29,10 @@ public class MainMenu implements AppMenu{
                     Matcher goToMatcher = MainMenuCommands.GoToMenu.getMatcher(input);
                     String menu = goToMatcher.group("menu"); //TODO: might not match
                     Menu selectedMenu = Menu.findMenu(menu);
-                    if (selectedMenu.equals(Menu.UserMenu) && App.getLoggedIn() == null) {
-                        System.out.println("You need to login as a user before accessing the user menu.");
+                    if (selectedMenu.equals(Menu.UserMenu) && (App.getLoggedIn() == null || App.getLoggedInType().equals(UserType.Store))) {
+                        System.out.println("You should login as user before accessing the user menu.");
+                    } else if (selectedMenu.equals(Menu.StoreMenu) && (App.getLoggedIn() == null || App.getLoggedInType().equals(UserType.Costumer))) {
+                        System.out.println("You should login as store before accessing the store menu.");
                     } else {
                         App.setCurrentMenu(selectedMenu);
                         System.out.println("Redirecting to the " + menu + " ...");

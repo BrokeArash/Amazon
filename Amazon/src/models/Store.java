@@ -1,5 +1,6 @@
 package models;
 
+import controllers.StoreMenuController;
 import models.enums.UserType;
 
 import java.util.ArrayList;
@@ -10,8 +11,8 @@ public class Store extends User{
 
     private String brandName;
     public ArrayList<Product> products = new ArrayList<>();
-    private float revenue;
-    private float costs;
+    private double revenue;
+    private double costs;
 
     public Store(String brandName, String password, String email) {
         this.brandName = brandName;
@@ -26,19 +27,19 @@ public class Store extends User{
         this.brandName = brandName;
     }
 
-    public float getRevenue() {
+    public double getRevenue() {
         return revenue;
     }
 
-    public void addRevenue(float revenue) {
+    public void addRevenue(double revenue) {
         this.revenue += revenue;
     }
 
-    public float getCosts() {
+    public double getCosts() {
         return costs;
     }
 
-    public void addCosts(float costs) {
+    public void addCosts(double costs) {
         this.costs += costs;
     }
 
@@ -62,6 +63,19 @@ public class Store extends User{
             }
         }
         return null;
+    }
+
+    public static Store getStoreByBrand (String brandName) {
+        for (Store store : App.stores) {
+            if (store.getBrandName().equals(brandName)) {
+                return store;
+            }
+        }
+        return null;
+    }
+
+    public void deleteStore () {
+        App.products.removeIf(product -> product.getBrand().equals(this.brandName));
     }
 
     @Override

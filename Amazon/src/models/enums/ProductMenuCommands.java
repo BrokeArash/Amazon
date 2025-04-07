@@ -12,7 +12,7 @@ public enum ProductMenuCommands implements Command{
     ShowInformationProduct("^\\s*show\\s+information\\s+of\\s+-id\\s+(?<productId>-?\\d+)\\s*$"),
     RateProduct("^\\s*Rate\\s+product\\s+" +
             "-r\\s+(?<number>-?\\d+)" +
-            "(?:\\s+-m\\s+(?<message>\".*\"))?\\s+" +
+            "(?:\\s*-m\\s+(?<message>\".*\"))?\\s*" +
             "-id\\s+(?<id>-?\\d+)\\s*$"),
     AddToCart("^\\s*add\\s+to\\s+cart\\s+" +
             "-product\\s+(?<productID>-?\\d+)\\s+" +

@@ -41,6 +41,7 @@ public class LoginMenu implements AppMenu{
                     String password = createUser.group("password");
                     String reEnterPassword = createUser.group("reEnteredPassword");
                     String email = createUser.group("emailAddress");
+                    email = email.trim();
                     Result result = controller.createUser(firstName, lastName, password, reEnterPassword, email);
                     System.out.println(result);
                     break;

@@ -17,7 +17,7 @@ public enum CostumerMenuCommands implements Command{
             "-country\\s+(?<country>.*)\\s+" +
             "-city\\s+(?<city>.*)\\s+" +
             "-street\\s+(?<street>.*)\\s+" +
-            "-postal\\s+(?<postal>-?\\d+)\\s*$"),
+            "-postal\\s+(?<postal>.*)\\s*$"),
     DeleteAddress("^\\s*delete\\s+address\\s+-id\\s+(?<id>-?\\d+)\\s*$"),
     ListAddress("^\\s*list\\s+my\\s+addresses\\s*$"),
     AddCard("^\\s*add\\s+a\\s+credit\\s+card\\s+" +

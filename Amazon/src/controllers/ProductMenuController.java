@@ -7,6 +7,7 @@ import java.util.*;
 public class ProductMenuController {
     public static int pageNum;
     public static ArrayList<Product> products = new ArrayList<>();
+
     public void showProducts(String sortBy, String mainSortBy) {
         products.clear();
         products.addAll(App.products);
@@ -40,9 +41,9 @@ public class ProductMenuController {
             System.out.printf("Name: %s\n", currentProduct.getName());
             System.out.printf("Rate: %.1f/5\n", currentProduct.getRating());
             if (currentProduct.getNumberOfDiscounted() > 0) {
-                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", currentProduct.getPrice(), currentProduct.getDiscountPrice(), currentProduct.getDiscount());
+                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", currentProduct.getBasePrice(), currentProduct.getPrice(), currentProduct.getDiscount());
             } else {
-                System.out.printf("Price: $%.1f\n", currentProduct.getPrice());
+                System.out.printf("Price: $%.1f\n", currentProduct.getBasePrice());
             }
             System.out.printf("Brand: %s\n", currentProduct.getBrand());
             System.out.printf("Stock: %d\n", currentProduct.getQuantity());
@@ -75,7 +76,10 @@ public class ProductMenuController {
     public void showInformationProduct(int productID) {
         Costumer mainUser = (Costumer) App.getLoggedIn();
         Product product = Costumer.getProductByID(productID, mainUser);
-        double newPrice = product.getDiscountPrice();
+        double newPrice = 0.0;
+        if (product != null) {
+            newPrice = product.getDiscountPrice();
+        }
         if (product == null) {
             System.out.println("No product found.");
         } else {
@@ -91,9 +95,9 @@ public class ProductMenuController {
             System.out.println("ID: " + product.getID());
             System.out.printf("Rating: %.1f/5\n", product.getRating());
             if (product.getDiscount() > 0) {
-                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getPrice(), newPrice, product.getDiscount()); //TODO
+                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getBasePrice(), product.getPrice(), product.getDiscount()); //TODO
             } else {
-                System.out.printf("Price: ~%%.1f~\n", product.getPrice());
+                System.out.printf("Price: $%.1f\n", product.getBasePrice());
             }
             System.out.println("Brand: " + product.getBrand());
             System.out.println("Number of Products Remaining: " + product.getQuantity());
@@ -102,17 +106,27 @@ public class ProductMenuController {
             System.out.println();
             System.out.println("Customer Reviews:  ");
             System.out.println("------------------------------------------------");
-            product.ratings.values().stream().flatMap(innerMap -> innerMap.entrySet().stream()).sorted(Map.Entry.<String, Float>comparingByValue().reversed()).forEach(entry -> System.out.printf("%s (%.1f/5)\n%s\n",
-                    findName(product.ratings, entry.getKey()),
-                    entry.getValue(),
-                    entry.getKey()));
-
+            product.ratings.values().stream()
+                    .flatMap(innerMap -> innerMap.entrySet().stream())
+                    .sorted(Map.Entry.<String, Float>comparingByValue().reversed())
+                    .forEach(entry -> {
+                        String reviewerName = findName(product.ratings, entry.getKey());
+                        if (entry.getKey() != null) {
+                            System.out.printf("%s (%.0f/5)\n%s\n------------------------------------------------\n",
+                                    reviewerName != null ? reviewerName : "Anonymous",
+                                    entry.getValue(),
+                                    entry.getKey());
+                        } else {
+                            System.out.printf("%s (%.0f/5)\n------------------------------------------------\n",
+                                    reviewerName != null ? reviewerName : "Anonymous",
+                                    entry.getValue());
+                        }
+                    });
         }
     }
 
 
-
-    public static String findName (
+    public static String findName(
             HashMap<String, HashMap<String, Float>> rating,
             String name) {
         for (Map.Entry<String, HashMap<String, Float>> entry : rating.entrySet()) {
@@ -124,11 +138,7 @@ public class ProductMenuController {
     }
 
 
-
-
-
     public Result rateMessage(float number, String message, int productID) {
-        System.out.println(number + " " + message + " " + productID);
         Costumer mainUser = (Costumer) App.getLoggedIn();
         Product product = Costumer.getProductByID(productID, mainUser);
         HashMap<String, Float> currentUserRating = new HashMap<>();
@@ -141,6 +151,7 @@ public class ProductMenuController {
         } else {
             currentUserRating.put(message, number);
             product.ratings.put(mainUser.getPassword() + " " + mainUser.getLastName(), currentUserRating);
+            product.setRating(product.calculateAverageRating());
             return new Result(true, "Thank you! Your rating and review have been submitted successfully.");
         }
     }
@@ -153,14 +164,36 @@ public class ProductMenuController {
         } else if (product == null) {
             return new Result(false, "No product found.");
         } else if (amount <= 0) {
-            return new Result(false, "No product found.");
-        } else if (amount > product.getDiscount()) {
+            return new Result(false, "Quantity must be a positive number.");
+        } else if (amount > product.getQuantity()) {
             System.out.printf("Only %d units of \"%s\" are available.\n", product.getQuantity(), product.getName());
             return new Result(false, "");
         }
+
+        for (Product cartProduct : mainUser.shoppingList) {
+            if (cartProduct.getID() == productID) {
+                cartProduct.addQuantity(amount);
+                product.addQuantity(-amount);
+                product.addNumberOfDiscounted(-amount);
+                if (product.getNumberOfDiscounted() == 0) {
+                    product.setDiscount(0);
+                }
+                product.addNumberOfSold(amount);
+                return new Result(true, "\"" + product.getName() + "\" (x" + amount + ") has been added to your cart.");
+            }
+        }
+
+        Product cartProduct = new Product(product);
+        cartProduct.setQuantity(amount);
         product.addQuantity(-amount);
-        mainUser.shoppingList.add(product);
-        return new Result(true, "\"" + product.getName() + "\" (x<" + amount + ">) has been added to your cart.");
+        product.addNumberOfDiscounted(-amount);
+        if (product.getNumberOfDiscounted() == 0) {
+            product.setDiscount(0);
+        }
+        product.addNumberOfSold(amount);
+        mainUser.shoppingList.add(cartProduct);
+        return new Result(true, "\"" + product.getName() + "\" (x" + amount + ") has been added to your cart.");
+
     }
 
     public Result back() {

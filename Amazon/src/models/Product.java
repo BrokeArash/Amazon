@@ -8,7 +8,9 @@ public class Product{
     private String name;
     private float rating;
     private int quantity;
+    private double basePrice;
     private double price;
+    private final double producerCost;
     private int discount = 0;
     private int numberOfDiscounted = 0;
     private String ATI;
@@ -18,15 +20,33 @@ public class Product{
 
     public HashMap <String, HashMap<String, Float>> ratings = new HashMap<>();
 
-    public Product(String brand, float rating, int quantity, double price, String name, String ati) {
+    public Product(String brand, float rating, int quantity,double producerCost, double basePrice, String name, String ati) {
         this.brand = brand;
         this.ID = ++lastAssigned;
         this.name = name;
         this.rating = rating;
         this.quantity = quantity;
-        this.price = price;
+        this.basePrice = basePrice;
+        this.price = basePrice;
+        this.producerCost = producerCost;
         ATI = ati;
         this.discount = 0;
+    }
+
+    public Product(Product other) {
+        this.brand = other.brand;
+        this.ID = other.ID;
+        this.name = other.name;
+        this.rating = other.rating;
+        this.quantity = other.quantity;
+        this.basePrice = other.basePrice;
+        this.price = other.price;
+        this.producerCost = other.producerCost;
+        this.discount = other.discount;
+        this.numberOfDiscounted = other.numberOfDiscounted;
+        this.ATI = other.ATI;
+        this.numberOfSold = other.numberOfSold;
+        this.ratings = new HashMap<>(other.ratings);
     }
 
     public int getID() {
@@ -50,7 +70,19 @@ public class Product{
     }
 
     public double getPrice() {
-        return price;
+        return (discount > 0) ? price * (1 - discount/100.0) : price;
+    }
+
+    public double getBasePrice() {
+        return basePrice;
+    }
+
+    public void setBasePrice(double basePrice) {
+        this.basePrice = basePrice;
+    }
+
+    public double getProducerCost() {
+        return producerCost;
     }
 
     public void setID(int ID) {
@@ -81,6 +113,10 @@ public class Product{
         this.quantity += quantity;
     }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public String getATI() {
         return ATI;
     }
@@ -102,6 +138,10 @@ public class Product{
     }
 
     public void addNumberOfDiscounted(int numberOfDiscounted) {
+        if (this.numberOfDiscounted + numberOfDiscounted < 0) {
+            this.numberOfDiscounted = 0;
+            return;
+        }
         this.numberOfDiscounted += numberOfDiscounted;
     }
 
@@ -114,6 +154,25 @@ public class Product{
     }
 
     public double getDiscountPrice() {
-        return getPrice() - (getPrice() * (float) (getDiscount()) / 100);
+        return getPrice() - (getPrice() * ( (float)(getDiscount())) / 100);
     }
+
+    public float calculateAverageRating() {
+        if (ratings.isEmpty()) {
+            return this.rating;
+        }
+
+        float totalSum = 0f;
+        int ratingCount = 0;
+
+        for (HashMap<String, Float> userRatings : ratings.values()) {
+            for (Float score : userRatings.values()) {
+                totalSum += score;
+                ratingCount++;
+            }
+        }
+
+        return ratingCount > 0 ? totalSum / ratingCount : 0f;
+    }
+
 }

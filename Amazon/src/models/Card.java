@@ -6,14 +6,13 @@ public class Card {
     private String cvv;
     private float value;
     private int id;
-    private static int lastAssigned = 0;
 
-    public Card(String cardNumber, String expirationDate, String cvv, float value) {
+    public Card(int id, String cardNumber, String expirationDate, String cvv, float value) {
         this.cardNumber = cardNumber;
         this.expirationDate = expirationDate;
         this.cvv = cvv;
         this.value = value;
-        this.id = ++lastAssigned;
+        this.id = id;
     }
 
     public String getCardNumber() {

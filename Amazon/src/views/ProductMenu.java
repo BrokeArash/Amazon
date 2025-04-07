@@ -50,7 +50,7 @@ public class ProductMenu implements AppMenu{
                 break;
             case RateProduct:
                 Matcher rateProductMatcher = ProductMenuCommands.RateProduct.getMatcher(input);
-                float number = Integer.parseInt(rateProductMatcher.group("number"));
+                float number = Float.parseFloat(rateProductMatcher.group("number"));
                 String message;
                 if (rateProductMatcher.group("message") != null) {
                     message = rateProductMatcher.group("message");

@@ -98,7 +98,7 @@ public class Costumer extends User{
     }
 
     public static Product getProductByID(int id, Costumer mainUser) {
-        for (Product product : mainUser.shoppingList) {
+        for (Product product : App.products) {
             if (product.getID() == id) {
                 return product;
             }

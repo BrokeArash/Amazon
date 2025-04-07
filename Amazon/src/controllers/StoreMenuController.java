@@ -42,6 +42,10 @@ public class StoreMenuController {
 
     public void showListOfProducts() {
         Store mainUser = (Store) App.getLoggedIn();
+        if (mainUser.products.isEmpty()) {
+            System.out.println("No products available in the store.");
+            return;
+        }
         System.out.println("Store Products (Sorted by date added)  ");
         System.out.println("------------------------------------------------");
         for (Product product : mainUser.products) {

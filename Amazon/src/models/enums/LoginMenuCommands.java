@@ -29,7 +29,7 @@ public enum LoginMenuCommands implements Command{
     Back("^\\s*go\\s+back\\s*$"),
     CheckName("^[A-Z]{1}[a-z]+$"),
     CheckPassword("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{3,}$"),
-    CheckEmail("^[a-zA-Z0-9]*\\.?[a-zA-Z0-9]+@[a-z]+\\.com$"),
+    CheckEmail("^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)?@[a-z]+\\.com$"),
     CheckStoreName(".{5,}");
 
 

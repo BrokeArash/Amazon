@@ -25,7 +25,7 @@ public class ProductMenuController {
     }
 
     public static void showPage(ArrayList<Product> products, int pageNum, String mainSortBy) {
-        System.out.printf("Product List (Sorted by: %s)\n------------------------------------------------\n", mainSortBy);
+        System.out.printf("Product List (Sorted by: %s%s)\n------------------------------------------------\n", mainSortBy.trim().substring(0, 1).toUpperCase(), mainSortBy.substring(1));
         for (int i = pageNum; i < pageNum + 10; i++) {
             if (i == products.size()) {
                 break;
@@ -38,14 +38,14 @@ public class ProductMenuController {
             } else {
                 System.out.printf("ID: %d\n", currentProduct.getID());
             }
-            System.out.printf("Name: %s\n", currentProduct.getName());
+            System.out.printf("Name: %s\n", currentProduct.getName().substring(1, mainSortBy.length()-3));
             System.out.printf("Rate: %.1f/5\n", currentProduct.getRating());
             if (currentProduct.getNumberOfDiscounted() > 0) {
                 System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", currentProduct.getPrice(), currentProduct.getDiscountPrice(), currentProduct.getDiscount());
             } else {
                 System.out.printf("Price: $%.1f\n", currentProduct.getPrice());
             }
-            System.out.printf("Brand: %s\n", currentProduct.getBrand());
+            System.out.printf("Brand: %s\n", currentProduct.getBrand().substring(1, currentProduct.getBrand().length()-1));
             System.out.printf("Stock: %d\n", currentProduct.getQuantity());
             System.out.println("------------------------------------------------");
         }
@@ -129,6 +129,7 @@ public class ProductMenuController {
 
 
     public Result rateMessage(float number, String message, int productID) {
+        System.out.println(number + " " + message + " " + productID);
         Costumer mainUser = (Costumer) App.getLoggedIn();
         Product product = Costumer.getProductByID(productID, mainUser);
         HashMap<String, Float> currentUserRating = new HashMap<>();

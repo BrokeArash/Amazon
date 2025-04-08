@@ -51,21 +51,21 @@ public class LoginMenu implements AppMenu{
                     password = createStore.group("password");
                     reEnterPassword = createStore.group("reEnterPassword");
                     email = createStore.group("email");
-                    result = controller.createStore(brand, password, reEnterPassword, email);
+                    result = controller.createStore(brand, password, reEnterPassword, email.trim());
                     System.out.println(result);
                     break;
                 case LoginUser:
                     Matcher loginUser = LoginMenuCommands.LoginUser.getMatcher(input);
                     email = loginUser.group("email");
                     password = loginUser.group("password");
-                    result = controller.loginUser(email, password);
+                    result = controller.loginUser(email.trim(), password.trim());
                     System.out.println(result);
                     break;
                 case LoginStore:
                     Matcher loginStore = LoginMenuCommands.LoginStore.getMatcher(input);
                     email = loginStore.group("email");
                     password = loginStore.group("password");
-                    result = controller.loginStore(email, password);
+                    result = controller.loginStore(email.trim(), password.trim());
                     System.out.println(result);
                     break;
                 case Logout:

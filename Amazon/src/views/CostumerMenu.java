@@ -72,10 +72,10 @@ public class CostumerMenu implements AppMenu {
                     break;
                 case AddAddress:
                     Matcher addAddressMatcher = CostumerMenuCommands.AddAddress.getMatcher(input);
-                    String country = addAddressMatcher.group("country");
-                    String city = addAddressMatcher.group("city");
-                    String street = addAddressMatcher.group("street");
-                    String postal = addAddressMatcher.group("postal");
+                    String country = addAddressMatcher.group("country").trim();
+                    String city = addAddressMatcher.group("city").trim();
+                    String street = addAddressMatcher.group("street").trim();
+                    String postal = addAddressMatcher.group("postal").trim();
                     result = controller.addAddress(country, city, street, postal);
                     System.out.println(result);
                     break;

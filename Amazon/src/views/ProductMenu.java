@@ -34,14 +34,14 @@ public class ProductMenu implements AppMenu{
                     Matcher showProductsMatcher = ProductMenuCommands.ShowProducts.getMatcher(input);
                     String sortBy = showProductsMatcher.group("sortBy");
                     mainSortBy = sortBy;
-                    sortBy = sortBy.replaceAll(" ", "");
+                    sortBy = sortBy.replaceAll(" ", "").trim();
                     controller.showProducts(sortBy.trim(), mainSortBy);
                     break;
                 case ShowNext:
-                    controller.showNext(mainSortBy);
+                    controller.showNext();
                     break;
                 case ShowPast:
-                    controller.showPast(mainSortBy);
+                    controller.showPast();
                     break;
                 case ShowInformationProduct:
                     Matcher showInformationProductMatcher = ProductMenuCommands.ShowInformationProduct.getMatcher(input);

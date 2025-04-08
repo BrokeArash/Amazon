@@ -61,10 +61,10 @@ public class LoginMenuController {
     }
 
     public Result loginUser(String email, String password) {
-        Costumer user = Costumer.getUserByEmail(email);
+        Costumer user = Costumer.getUserByEmail(email.trim());
         if (user == null) {
             return new Result(false, "No user account found with the provided email.");
-        } else if (!user.getPassword().equals(password)) {
+        } else if (!user.getPassword().trim().equals(password)) {
             return new Result(false, "Password is incorrect.");
         } else {
             App.setLoggedIn(user);
@@ -78,7 +78,7 @@ public class LoginMenuController {
         Store user = Store.getStoreByEmail(email);
         if (user == null) {
             return new Result(false, "No store account found with the provided email.");
-        } else if (!Store.getStoreByEmail(email).getPassword().equals(password)) {
+        } else if (!Store.getStoreByEmail(email).getPassword().trim().equals(password)) {
             return new Result(false, "Password is incorrect.");
         } else {
             App.setLoggedIn(user);

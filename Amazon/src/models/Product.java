@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Product{
@@ -11,23 +12,22 @@ public class Product{
     private double basePrice;
     private double price;
     private final double producerCost;
-    private int discount = 0;
+    private double discount;
     private int numberOfDiscounted = 0;
     private String ATI;
     private static int lastAssigned = 100;
     private int numberOfSold = 0;
 
 
-    public HashMap <String, HashMap<String, Float>> ratings = new HashMap<>();
+    public ArrayList<Rating> ratings = new ArrayList<>();
 
-    public Product(String brand, float rating, int quantity,double producerCost, double basePrice, String name, String ati) {
+    public Product(String brand, int quantity,double producerCost, double basePrice, String name, String ati) {
         this.brand = brand;
         this.ID = ++lastAssigned;
         this.name = name;
-        this.rating = rating;
+        this.rating = 2.5F;
         this.quantity = quantity;
         this.basePrice = basePrice;
-        this.price = basePrice;
         this.producerCost = producerCost;
         ATI = ati;
         this.discount = 0;
@@ -40,13 +40,12 @@ public class Product{
         this.rating = other.rating;
         this.quantity = other.quantity;
         this.basePrice = other.basePrice;
-        this.price = other.price;
         this.producerCost = other.producerCost;
         this.discount = other.discount;
         this.numberOfDiscounted = other.numberOfDiscounted;
         this.ATI = other.ATI;
         this.numberOfSold = other.numberOfSold;
-        this.ratings = new HashMap<>(other.ratings);
+        this.ratings.addAll(other.ratings);
     }
 
     public int getID() {
@@ -70,7 +69,7 @@ public class Product{
     }
 
     public double getPrice() {
-        return (discount > 0) ? price * (1 - discount/100.0) : price;
+        return this.basePrice - (this.basePrice * this.discount);
     }
 
     public double getBasePrice() {
@@ -101,11 +100,11 @@ public class Product{
         this.price = price;
     }
 
-    public int getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 
@@ -153,9 +152,6 @@ public class Product{
         this.brand = brand;
     }
 
-    public double getDiscountPrice() {
-        return getPrice() - (getPrice() * ( (float)(getDiscount())) / 100);
-    }
 
     public float calculateAverageRating() {
         if (ratings.isEmpty()) {
@@ -165,14 +161,12 @@ public class Product{
         float totalSum = 0f;
         int ratingCount = 0;
 
-        for (HashMap<String, Float> userRatings : ratings.values()) {
-            for (Float score : userRatings.values()) {
-                totalSum += score;
-                ratingCount++;
-            }
+        for(Rating rating : this.ratings) {
+            totalSum += rating.getRate();
+            ratingCount++;
         }
 
-        return ratingCount > 0 ? totalSum / ratingCount : 0f;
+        return totalSum/ratingCount;
     }
 
 }

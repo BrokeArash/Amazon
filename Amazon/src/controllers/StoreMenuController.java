@@ -11,7 +11,7 @@ public class StoreMenuController {
             return new Result(false, "Number of products must be a positive number.");
         } else {
             mainUser.addCosts(producerCost * numberOfProductsToSell);
-            Product newProduct = new Product(mainUser.getBrandName(), 2.5F, numberOfProductsToSell,producerCost, price, name, aboutThisItem);
+            Product newProduct = new Product(mainUser.getBrandName(), numberOfProductsToSell,producerCost, price, name, aboutThisItem);
             mainUser.products.add(newProduct);
             App.products.add(newProduct);
             return new Result(true, "Product \"" + name + "\" has been added successfully with ID " + newProduct.getID() +".");
@@ -28,7 +28,7 @@ public class StoreMenuController {
         } else if (quantity > product.getQuantity()) {
             return new Result(false, "Oops! Not enough stock to apply the discount to that many items.");
         } else {
-            product.setDiscount(discountPercentage);
+            product.setDiscount(((double) discountPercentage) / 100);
             product.addNumberOfDiscounted(quantity);
             return new Result(true, "A " + discountPercentage + "% discount has been applied to " + quantity + " units of product ID " + productID + ".");
         }
@@ -50,7 +50,7 @@ public class StoreMenuController {
         System.out.println("Store Products (Sorted by date added)  ");
         System.out.println("------------------------------------------------");
         for (Product product : mainUser.products) {
-            double newPrice = product.getDiscountPrice();
+            double newPrice = product.getPrice();
             if (product.getQuantity() == 0) {
                 System.out.printf("ID: %d  (**Sold out!**)\n", product.getID());
             } else if (product.getDiscount() > 0) {
@@ -60,7 +60,7 @@ public class StoreMenuController {
             }
             System.out.println("Name: " + product.getName());
             if (product.getDiscount() > 0) {
-                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getBasePrice(), product.getPrice(), product.getDiscount());
+                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getBasePrice(), product.getPrice(), (int)(product.getDiscount()*100));
             } else {
                 System.out.printf("Price: $%.1f\n", product.getBasePrice());
             }

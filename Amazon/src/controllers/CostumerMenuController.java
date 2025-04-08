@@ -16,7 +16,7 @@ public class CostumerMenuController {
         }
 
         System.out.println("order History  ");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━  ");
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
         for (Order order : mainUser.orders) {
             System.out.println();
             System.out.println("Order ID: " + order.getID());
@@ -25,10 +25,10 @@ public class CostumerMenuController {
             System.out.println();
             System.out.println("Products (Sorted by Name):");
             for (int i = 0; i < order.products.size(); i++) { //TODO: sort by name
-                System.out.println((i+1) + "- " + order.products.get(i).getName());
+                System.out.println("  " + (i+1) + "- " + order.products.get(i).getName());
             }
             System.out.println();
-            System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━  ");
+            System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
         }
         return new Result(true, "");
 
@@ -54,6 +54,7 @@ public class CostumerMenuController {
             System.out.println("    ID: " + order.products.get(i).getID());
             System.out.println("    Brand: " + order.products.get(i).getBrand());
             System.out.printf("    Rating:%.1f/5\n", order.products.get(i).getRating());
+
             System.out.println("    Quantity: " + order.products.get(i).getQuantity());
             if (order.products.get(i).getQuantity() > 1) {
                 System.out.println("    Price: " + order.products.get(i).getPrice() + " each");
@@ -62,7 +63,7 @@ public class CostumerMenuController {
             }
             System.out.println();
         }
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━  ");
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.printf("**Total Cost: $%.1f**  ", sum);
         return new Result(true, "");
     }
@@ -159,7 +160,7 @@ public class CostumerMenuController {
             System.out.println("No addresses found. Please add an address first.");
         } else {
             System.out.println("Saved Addresses");
-            System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━  ");
+            System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
             for (Address address : mainUser.addresses) {
                 System.out.println();
                 System.out.println("Address " + address.getId() + ":");
@@ -168,7 +169,7 @@ public class CostumerMenuController {
                 System.out.println("City: " + address.getCity());
                 System.out.println("Street: " + address.getStreet()); //TODO: might be wrong with number
                 System.out.println();
-                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━  ");
+                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
             }
         }
     }
@@ -236,8 +237,8 @@ public class CostumerMenuController {
                 System.out.println("Product ID  : " + product.getID());
                 System.out.println("Name        : " + product.getName());
                 System.out.println("Quantity    : " + product.getQuantity());
-                System.out.printf("Price       : $%.1f (each)\n",  product.getBasePrice());
-                System.out.printf("Total Price : $%.1f\n", product.getBasePrice() * product.getQuantity());
+                System.out.printf("Price       : $%.1f (each)\n",  product.getPrice());
+                System.out.printf("Total Price : $%.1f\n", product.getPrice() * product.getQuantity());
                 System.out.println("Brand       : " + product.getBrand());
                 System.out.printf("Rating      : %.1f/5\n", product.getRating());
                 System.out.println("------------------------------------");
@@ -253,7 +254,7 @@ public class CostumerMenuController {
         float sum = 0;
         for (Product product : mainUser.shoppingList) {
             Store thisStore = Store.getStoreByBrand(product.getBrand());
-            double total = product.getQuantity() * product.getBasePrice();
+            double total = product.getQuantity() * product.getPrice();
             sum += total;
             storeTemp.merge(thisStore, total, Double::sum);
         }
@@ -282,7 +283,9 @@ public class CostumerMenuController {
 
     public Result removeFromCart(int productID, int quantity) {
         Costumer mainUser = (Costumer) App.getLoggedIn();
-        Product product = Costumer.getProductByID(productID, mainUser);
+        Product product = mainUser.getProductInCartByID(productID, mainUser);
+        System.out.println(product.getQuantity() + " " + product.getName());
+
         if (mainUser.shoppingList.isEmpty()) {
             return new Result(false, "Your shopping cart is empty.");
         } else if (product == null) {

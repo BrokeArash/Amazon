@@ -6,26 +6,32 @@ import java.util.*;
 
 public class ProductMenuController {
     public static int pageNum;
+    public static String sortby;
     public static ArrayList<Product> products = new ArrayList<>();
 
     public void showProducts(String sortBy, String mainSortBy) {
         products.clear();
+        String sort = sortBy;
         products.addAll(App.products);
-        if (sortBy.equals("rate")) {
+        if (sort.equals("rate")) {
+            sortby = "Rate";
             Collections.sort(products, Comparator.comparing(Product::getRating).reversed());
-        } else if (sortBy.equals("higherpricetolower")) {
-            Collections.sort(products, Comparator.comparing(Product::getDiscountPrice).reversed());
-        } else if (sortBy.equals("lowerpricetohigher")) {
-            Collections.sort(products, Comparator.comparing(Product::getDiscountPrice));
-        } else if (sortBy.equals("numberofsold")) {
+        } else if (sort.equals("higherpricetolower")) {
+            sortby = "Higher price to lower";
+            Collections.sort(products, Comparator.comparing(Product::getPrice).reversed());
+        } else if (sort.equals("lowerpricetohigher")) {
+            sortby = "Lower price to higher";
+            Collections.sort(products, Comparator.comparing(Product::getPrice));
+        } else if (sort.equals("numberofsold")) {
+            sortby = "Number of sold";
             Collections.sort(products, Comparator.comparing(Product::getNumberOfSold));
         }
         pageNum = 0;
-        showPage(products, pageNum, mainSortBy);
+        showPage(products, pageNum);
     }
 
-    public static void showPage(ArrayList<Product> products, int pageNum, String mainSortBy) {
-        System.out.printf("Product List (Sorted by: %s%s)\n------------------------------------------------\n", mainSortBy.trim().substring(0, 1).toUpperCase(), mainSortBy.substring(1));
+    public static void showPage(ArrayList<Product> products, int pageNum) {
+        System.out.printf("Product List (Sorted by: %s)\n------------------------------------------------\n", sortby);
         for (int i = pageNum; i < pageNum + 10; i++) {
             if (i == products.size()) {
                 break;
@@ -40,8 +46,9 @@ public class ProductMenuController {
             }
             System.out.printf("Name: %s\n", currentProduct.getName());
             System.out.printf("Rate: %.1f/5\n", currentProduct.getRating());
+
             if (currentProduct.getNumberOfDiscounted() > 0) {
-                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", currentProduct.getBasePrice(), currentProduct.getPrice(), currentProduct.getDiscount());
+                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", currentProduct.getBasePrice(), currentProduct.getPrice(),(int)(currentProduct.getDiscount()*100));
             } else {
                 System.out.printf("Price: $%.1f\n", currentProduct.getBasePrice());
             }
@@ -55,22 +62,22 @@ public class ProductMenuController {
         }
     }
 
-    public static void showNext(String mainSortBy) {
+    public static void showNext() {
         if (products.size() < pageNum + 11) {
             System.out.println("No more products available.");
         } else {
             pageNum += 10;
-            showPage(products, pageNum, mainSortBy);
+            showPage(products, pageNum);
         }
     }
 
-    public static void showPast(String mainSortBy) {
+    public static void showPast() {
         if (pageNum == 0) {
             System.out.println("No more products available.");
             return;
         }
         pageNum -= 10;
-        showPage(products, pageNum, mainSortBy);
+        showPage(products, pageNum);
     }
 
     public void showInformationProduct(int productID) {
@@ -78,7 +85,7 @@ public class ProductMenuController {
         Product product = Costumer.getProductByID(productID, mainUser);
         double newPrice = 0.0;
         if (product != null) {
-            newPrice = product.getDiscountPrice();
+            newPrice = product.getPrice();
         }
         if (product == null) {
             System.out.println("No product found.");
@@ -93,9 +100,11 @@ public class ProductMenuController {
                 System.out.println("Name: " + product.getName());
             }
             System.out.println("ID: " + product.getID());
+
             System.out.printf("Rating: %.1f/5\n", product.getRating());
+
             if (product.getDiscount() > 0) {
-                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getBasePrice(), product.getPrice(), product.getDiscount()); //TODO
+                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getBasePrice(), product.getPrice(),(int)(product.getDiscount()*100)); //TODO
             } else {
                 System.out.printf("Price: $%.1f\n", product.getBasePrice());
             }
@@ -106,22 +115,11 @@ public class ProductMenuController {
             System.out.println();
             System.out.println("Customer Reviews:  ");
             System.out.println("------------------------------------------------");
-            product.ratings.values().stream()
-                    .flatMap(innerMap -> innerMap.entrySet().stream())
-                    .sorted(Map.Entry.<String, Float>comparingByValue().reversed())
-                    .forEach(entry -> {
-                        String reviewerName = findName(product.ratings, entry.getKey());
-                        if (entry.getKey() != null) {
-                            System.out.printf("%s (%.0f/5)\n%s\n------------------------------------------------\n",
-                                    reviewerName != null ? reviewerName : "Anonymous",
-                                    entry.getValue(),
-                                    entry.getKey());
-                        } else {
-                            System.out.printf("%s (%.0f/5)\n------------------------------------------------\n",
-                                    reviewerName != null ? reviewerName : "Anonymous",
-                                    entry.getValue());
-                        }
-                    });
+            for (Rating rating : product.ratings) {
+                System.out.printf("%s (%d/5)\n", rating.getName(), rating.getRate());
+                System.out.println(rating.getMessage());
+                System.out.println("------------------------------------------------");
+            }
         }
     }
 
@@ -141,7 +139,6 @@ public class ProductMenuController {
     public Result rateMessage(float number, String message, int productID) {
         Costumer mainUser = (Costumer) App.getLoggedIn();
         Product product = Costumer.getProductByID(productID, mainUser);
-        HashMap<String, Float> currentUserRating = new HashMap<>();
         if (product == null) {
             return new Result(false, "No product found.");
         } else if (number < 1 || number > 5) {
@@ -149,8 +146,8 @@ public class ProductMenuController {
         } else if (mainUser == null) {
             return new Result(false, "You must be logged in to rate a product.");
         } else {
-            currentUserRating.put(message, number);
-            product.ratings.put(mainUser.getPassword() + " " + mainUser.getLastName(), currentUserRating);
+            Rating newRate = new Rating(mainUser, message, (int)number);
+            product.ratings.add(newRate);
             product.setRating(product.calculateAverageRating());
             return new Result(true, "Thank you! Your rating and review have been submitted successfully.");
         }

@@ -109,7 +109,7 @@ public class Costumer extends User{
         return null;
     }
 
-    public static Product getProductByID(int id, Costumer mainUser) {
+    public static Product getProductByID(int id) {
         for (Product product : App.products) {
             if (product.getID() == id) {
                 return product;

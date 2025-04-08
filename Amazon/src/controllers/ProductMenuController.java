@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import models.enums.UserType;
 
 import java.util.*;
 
@@ -24,7 +25,7 @@ public class ProductMenuController {
             Collections.sort(products, Comparator.comparing(Product::getPrice));
         } else if (sort.equals("numberofsold")) {
             sortby = "Number of sold";
-            Collections.sort(products, Comparator.comparing(Product::getNumberOfSold));
+            Collections.sort(products, Comparator.comparing(Product::getNumberOfSold).reversed());
         }
         pageNum = 0;
         showPage(products, pageNum);
@@ -81,8 +82,7 @@ public class ProductMenuController {
     }
 
     public void showInformationProduct(int productID) {
-        Costumer mainUser = (Costumer) App.getLoggedIn();
-        Product product = Costumer.getProductByID(productID, mainUser);
+        Product product = Costumer.getProductByID(productID);
         double newPrice = 0.0;
         if (product != null) {
             newPrice = product.getPrice();
@@ -90,10 +90,10 @@ public class ProductMenuController {
         if (product == null) {
             System.out.println("No product found.");
         } else {
-            System.out.println("Product Details  ");
+            System.out.println("Product Details");
             System.out.println("------------------------------------------------");
             if (product.getQuantity() == 0) {
-                System.out.println("Name: " + product.getName() + " **Sold out!");
+                System.out.println("Name: " + product.getName() + "  **(Sold out!)**");
             } else if (product.getDiscount() > 0) {
                 System.out.println("Name: " + product.getName() + "  **(On Sale! " + product.getNumberOfDiscounted() + " units discounted)**");
             } else {
@@ -110,43 +110,34 @@ public class ProductMenuController {
             }
             System.out.println("Brand: " + product.getBrand());
             System.out.println("Number of Products Remaining: " + product.getQuantity());
-            System.out.println("About this item:  ");
+            System.out.println("About this item:");
             System.out.println(product.getATI()); //TODO
             System.out.println();
-            System.out.println("Customer Reviews:  ");
+            System.out.println("Customer Reviews:");
             System.out.println("------------------------------------------------");
             for (Rating rating : product.ratings) {
                 System.out.printf("%s (%d/5)\n", rating.getName(), rating.getRate());
-                System.out.println(rating.getMessage());
+                if (rating.getMessage() != null) {
+                    System.out.println(rating.getMessage());
+                }
                 System.out.println("------------------------------------------------");
             }
         }
     }
 
 
-    public static String findName(
-            HashMap<String, HashMap<String, Float>> rating,
-            String name) {
-        for (Map.Entry<String, HashMap<String, Float>> entry : rating.entrySet()) {
-            if (entry.getValue().containsKey(name)) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
-
     public Result rateMessage(float number, String message, int productID) {
-        Costumer mainUser = (Costumer) App.getLoggedIn();
-        Product product = Costumer.getProductByID(productID, mainUser);
+        User mainUser = App.getLoggedIn();
+        Product product = Costumer.getProductByID(productID);
         if (product == null) {
             return new Result(false, "No product found.");
         } else if (number < 1 || number > 5) {
             return new Result(false, "Rating must be between 1 and 5.");
-        } else if (mainUser == null) {
+        } else if (mainUser == null || App.getLoggedInType().equals(UserType.Store)) {
             return new Result(false, "You must be logged in to rate a product.");
         } else {
-            Rating newRate = new Rating(mainUser, message, (int)number);
+            Costumer main = (Costumer) mainUser;
+            Rating newRate = new Rating(main, message, (int)number);
             product.ratings.add(newRate);
             product.setRating(product.calculateAverageRating());
             return new Result(true, "Thank you! Your rating and review have been submitted successfully.");
@@ -154,11 +145,12 @@ public class ProductMenuController {
     }
 
     public Result addToCart(int productID, int amount) {
-        Costumer mainUser = (Costumer) App.getLoggedIn();
-        Product product = Costumer.getProductByID(productID, mainUser);
-        if (mainUser == null) {
+        User mainUser = App.getLoggedIn();
+        Product product = Costumer.getProductByID(productID);
+        if (mainUser == null || App.getLoggedInType().equals(UserType.Store)) {
             return new Result(false, "You must be logged in to add items to your cart.");
-        } else if (product == null) {
+        }
+        else if (product == null) {
             return new Result(false, "No product found.");
         } else if (amount <= 0) {
             return new Result(false, "Quantity must be a positive number.");
@@ -167,7 +159,8 @@ public class ProductMenuController {
             return new Result(false, "");
         }
 
-        for (Product cartProduct : mainUser.shoppingList) {
+        Costumer main =(Costumer) mainUser;
+        for (Product cartProduct : main.shoppingList) {
             if (cartProduct.getID() == productID) {
                 cartProduct.addQuantity(amount);
                 product.addQuantity(-amount);
@@ -188,7 +181,7 @@ public class ProductMenuController {
             product.setDiscount(0);
         }
         product.addNumberOfSold(amount);
-        mainUser.shoppingList.add(cartProduct);
+        main.shoppingList.add(cartProduct);
         return new Result(true, "\"" + product.getName() + "\" (x" + amount + ") has been added to your cart.");
 
     }

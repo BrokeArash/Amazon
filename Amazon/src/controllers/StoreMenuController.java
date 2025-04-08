@@ -47,7 +47,7 @@ public class StoreMenuController {
             System.out.println("No products available in the store.");
             return;
         }
-        System.out.println("Store Products (Sorted by date added)  ");
+        System.out.println("Store Products (Sorted by date added)");
         System.out.println("------------------------------------------------");
         for (Product product : mainUser.products) {
             double newPrice = product.getPrice();

@@ -15,7 +15,7 @@ public class CostumerMenuController {
             return new Result(false, "No orders found.");
         }
 
-        System.out.println("order History  ");
+        System.out.println("order History");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
         for (Order order : mainUser.orders) {
             System.out.println();
@@ -44,27 +44,26 @@ public class CostumerMenuController {
         Order order = Costumer.getOrderByID(id, mainUser);
         float sum = 0;
         for (Product product : order.products) {
-            sum += product.getPrice();
+            sum += product.getPrice() * product.getQuantity();
         }
-        System.out.println("Products in this order:  ");
+        System.out.println("Products in this order:");
         System.out.println();
-        System.out.println(order.getTIO()); //temp
-        for (int i = 0; i < order.getTIO(); i++) {
-            System.out.println(i + "- Product Name: " + order.products.get(i).getBrand());
+        for (int i = 0; i < order.products.size(); i++) {
+            System.out.println( (i+1) + "- Product Name: " + order.products.get(i).getName());
             System.out.println("    ID: " + order.products.get(i).getID());
             System.out.println("    Brand: " + order.products.get(i).getBrand());
-            System.out.printf("    Rating:%.1f/5\n", order.products.get(i).getRating());
+            System.out.printf("    Rating: %.1f/5\n", order.products.get(i).getRating());
 
             System.out.println("    Quantity: " + order.products.get(i).getQuantity());
             if (order.products.get(i).getQuantity() > 1) {
-                System.out.println("    Price: " + order.products.get(i).getPrice() + " each");
+                System.out.printf("    Price: $%.1f each", order.products.get(i).getPrice());
             } else {
-                System.out.println("    Price: " + order.products.get(i).getPrice());
+                System.out.printf("    Price: $%.1f", order.products.get(i).getPrice());
             }
             System.out.println();
         }
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.printf("**Total Cost: $%.1f**  ", sum);
+        System.out.printf("**Total Cost: $%.1f**", sum);
         return new Result(true, "");
     }
 
@@ -283,22 +282,26 @@ public class CostumerMenuController {
 
     public Result removeFromCart(int productID, int quantity) {
         Costumer mainUser = (Costumer) App.getLoggedIn();
-        Product product = mainUser.getProductInCartByID(productID, mainUser);
-        System.out.println(product.getQuantity() + " " + product.getName());
+        Product cartProduct = mainUser.getProductInCartByID(productID, mainUser);
+        Product product = Costumer.getProductByID(productID);
 
         if (mainUser.shoppingList.isEmpty()) {
             return new Result(false, "Your shopping cart is empty.");
-        } else if (product == null) {
+        } else if (cartProduct == null) {
             return new Result(false,"The product with ID " + productID + " is not in your cart.");
         } else if (quantity <= 0) {
             return new Result(false, "Quantity must be a positive number.");
-        } else if (quantity > product.getQuantity()) {
-            return new Result(false, "You only have " + product.getQuantity() + " of \"" + product.getName() + "\" in your cart.");
+        } else if (quantity > cartProduct.getQuantity()) {
+            return new Result(false, "You only have " + cartProduct.getQuantity() + " of \"" + cartProduct.getName() + "\" in your cart.");
         } else {
-            product.decreaseQuantity(quantity);
-            if (product.getQuantity() > 0) {
+            cartProduct.decreaseQuantity(quantity);
+            product.addQuantity(quantity);
+            product.addNumberOfSold(-quantity);
+            product.addNumberOfDiscounted(quantity);
+            if (cartProduct.getQuantity() > 0) {
                 return new Result(true,"Successfully removed " + quantity + " of \"" + product.getName() + "\" from your cart.");
             } else {
+                mainUser.shoppingList.remove(cartProduct);
                 return new Result(false, "\"" + product.getName() + "\" has been completely removed from your cart.");
             }
         }

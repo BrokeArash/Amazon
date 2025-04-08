@@ -30,7 +30,7 @@ public class MainMenu implements AppMenu{
                     String menu = goToMatcher.group("menu"); //TODO: might not match
                     Menu selectedMenu = Menu.findMenu(menu);
                     if (selectedMenu.equals(Menu.UserMenu) && (App.getLoggedIn() == null || App.getLoggedInType().equals(UserType.Store))) {
-                        System.out.println("You should login as user before accessing the user menu.");
+                        System.out.println("You need to login as a user before accessing the user menu.");
                     } else if (selectedMenu.equals(Menu.StoreMenu) && (App.getLoggedIn() == null || App.getLoggedInType().equals(UserType.Costumer))) {
                         System.out.println("You should login as store before accessing the store menu.");
                     } else {

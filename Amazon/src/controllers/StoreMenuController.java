@@ -20,10 +20,10 @@ public class StoreMenuController {
 
     public Result applyDiscount(int productID, int discountPercentage, int quantity) {
         Store mainUser = (Store) App.getLoggedIn();
-        Product product = Store.getProductByID(productID, mainUser);
+        Product product = Costumer.getProductByID(productID);
         if (discountPercentage < 1 || discountPercentage > 100) {
             return new Result(false, "Discount percentage must be between 1 and 100.");
-        } else if (product == null) {
+        } else if (product == null || !product.getBrand().equals(mainUser.getBrandName())) {
             return new Result(false, "No product found.");
         } else if (quantity > product.getQuantity()) {
             return new Result(false, "Oops! Not enough stock to apply the discount to that many items.");
@@ -53,13 +53,13 @@ public class StoreMenuController {
             double newPrice = product.getPrice();
             if (product.getQuantity() == 0) {
                 System.out.printf("ID: %d  (**Sold out!**)\n", product.getID());
-            } else if (product.getDiscount() > 0) {
+            } else if (product.getDiscount() > 0 && product.getNumberOfDiscounted() > 0) {
                 System.out.printf("ID: %d  **(On Sale! %d units discounted)**\n",product.getID(), product.getNumberOfDiscounted());
             } else {
                 System.out.println("ID: " + product.getID());
             }
             System.out.println("Name: " + product.getName());
-            if (product.getDiscount() > 0) {
+            if (product.getDiscount() > 0 && product.getNumberOfDiscounted() > 0) {
                 System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getBasePrice(), product.getPrice(), (int)(product.getDiscount()*100));
             } else {
                 System.out.printf("Price: $%.1f\n", product.getBasePrice());
@@ -72,8 +72,8 @@ public class StoreMenuController {
 
     public Result addStock(int productId, int amount) {
         Store mainUser = (Store) App.getLoggedIn();
-        Product product = Store.getProductByID(productId, mainUser);
-        if (product == null) {
+        Product product = Costumer.getProductByID(productId);
+        if (product == null || !product.getBrand().equals(mainUser.getBrandName())) {
             return new Result(false, "No product found.");
         } else if (amount <= 0) {
             return new Result(false, "Amount must be a positive number.");
@@ -86,8 +86,8 @@ public class StoreMenuController {
 
     public Result updatePrice(int productId, double newPrice) {
         Store mainUser = (Store) App.getLoggedIn();
-        Product product = Store.getProductByID(productId, mainUser);
-        if (product == null) {
+        Product product = Costumer.getProductByID(productId);
+        if (product == null || !product.getBrand().equals(mainUser.getBrandName())) { //TODO: change back to mainuser product
             return new Result(false, "No product found.");
         } else if (newPrice <= 0) {
             return new Result(false, "Price must be a positive number.");

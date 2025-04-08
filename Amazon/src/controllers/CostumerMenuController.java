@@ -43,6 +43,7 @@ public class CostumerMenuController {
         }
         Order order = Costumer.getOrderByID(id, mainUser);
         float sum = 0;
+        order.products.sort(Comparator.comparing(Product::getID));
         for (Product product : order.products) {
             sum += product.getPrice() * product.getQuantity();
         }
@@ -266,6 +267,7 @@ public class CostumerMenuController {
         } else if (card.getValue() < sum) {
             return new Result(false, "Insufficient balance in the selected card.");
         }  else {
+
             card.addValue(-sum);
             int TIO = 0;
             for (Product product : mainUser.shoppingList) {
@@ -274,6 +276,10 @@ public class CostumerMenuController {
             Order newOrder = new Order(mainUser.orders.size() + 101, address, TIO, mainUser.shoppingList);
             mainUser.orders.add(newOrder);
             storeTemp.forEach((store, revenue) -> store.addRevenue(revenue));
+            for (Product product : mainUser.shoppingList) {
+                Product mainProduct = Costumer.getProductByID(product.getID());
+                mainProduct.addNumberOfSold(product.getQuantity());
+            }
             mainUser.shoppingList.clear();
             System.out.printf("Order has been placed successfully!\nOrder ID: %d\nTotal Paid: $%.1f\nShipping to: %s\n", newOrder.getID(), sum, newOrder.getAddress());
             return new Result(true, "");
@@ -296,8 +302,10 @@ public class CostumerMenuController {
         } else {
             cartProduct.decreaseQuantity(quantity);
             product.addQuantity(quantity);
-            product.addNumberOfSold(-quantity);
-            product.addNumberOfDiscounted(quantity);
+
+            if (product.getDiscount() > 0) {
+                product.addNumberOfDiscounted(quantity);
+            }
             if (cartProduct.getQuantity() > 0) {
                 return new Result(true,"Successfully removed " + quantity + " of \"" + product.getName() + "\" from your cart.");
             } else {

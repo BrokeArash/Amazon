@@ -11,7 +11,7 @@ public enum ProductMenuCommands implements Command{
     ShowPast("^\\s*show\\s+past\\s+10\\s+products\\s*$"),
     ShowInformationProduct("^\\s*show\\s+information\\s+of\\s+-id\\s+(?<productId>-?\\d+)\\s*$"),
     RateProduct("^\\s*Rate\\s+product\\s+" +
-            "-r\\s+(?<number>-?\\d+)" +
+            "-r\\s+(?<number>-?\\d+|-?\\d+\\.?\\d+)" +
             "(?:\\s*-m\\s+(?<message>\".*\"))?\\s*" +
             "-id\\s+(?<id>-?\\d+)\\s*$"),
     AddToCart("^\\s*add\\s+to\\s+cart\\s+" +

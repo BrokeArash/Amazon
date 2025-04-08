@@ -125,6 +125,10 @@ public class LoginMenuController {
                 App.stores.remove(thisStore);
                 thisStore.products.clear();
                 thisStore.deleteStore();
+                App.products.removeIf(product -> product.getBrand().equals(thisStore.getBrandName()));
+                for (Costumer costumer : App.costumers) {
+                    costumer.shoppingList.removeIf(product -> product.getBrand().equals(thisStore.getBrandName()));
+                }
             }
             App.setDeleteRequested(true);
             App.setLoggedIn(null);

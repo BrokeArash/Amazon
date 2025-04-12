@@ -4,10 +4,10 @@ public class Card {
     private String cardNumber;
     private String expirationDate;
     private String cvv;
-    private float value;
+    private double value;
     private int id;
 
-    public Card(int id, String cardNumber, String expirationDate, String cvv, float value) {
+    public Card(int id, String cardNumber, String expirationDate, String cvv, double value) {
         this.cardNumber = cardNumber;
         this.expirationDate = expirationDate;
         this.cvv = cvv;
@@ -39,11 +39,11 @@ public class Card {
         this.cvv = cvv;
     }
 
-    public float getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void addValue(float value) {
+    public void addValue(double value) {
         this.value += value;
     }
 

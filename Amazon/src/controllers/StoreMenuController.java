@@ -50,7 +50,6 @@ public class StoreMenuController {
         System.out.println("Store Products (Sorted by date added)");
         System.out.println("------------------------------------------------");
         for (Product product : mainUser.products) {
-            double newPrice = product.getPrice();
             if (product.getQuantity() == 0) {
                 System.out.printf("ID: %d  (**Sold out!**)\n", product.getID());
             } else if (product.getDiscount() > 0 && product.getNumberOfDiscounted() > 0) {
@@ -70,8 +69,7 @@ public class StoreMenuController {
         }
     }
 
-    public Result addStock(int productId, int amount) {
-        Store mainUser = (Store) App.getLoggedIn();
+    public Result addStock(int productId, int amount, Store mainUser) {
         Product product = Costumer.getProductByID(productId);
         if (product == null || !product.getBrand().equals(mainUser.getBrandName())) {
             return new Result(false, "No product found.");

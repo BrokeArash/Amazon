@@ -3,6 +3,7 @@ package views;
 import controllers.StoreMenuController;
 import models.App;
 import models.Result;
+import models.Store;
 import models.enums.Menu;
 import models.enums.ProductMenuCommands;
 import models.enums.StoreMenuCommands;
@@ -61,13 +62,14 @@ public class StoreMenu implements AppMenu{
                     Matcher addStockMatcher = StoreMenuCommands.AddStock.getMatcher(input);
                     int productId = Integer.parseInt(addStockMatcher.group("productId"));
                     int amount = Integer.parseInt(addStockMatcher.group("amount"));
-                    result = controller.addStock(productId, amount);
+                    Store mainUser = (Store) App.getLoggedIn();
+                    result = controller.addStock(productId, amount, mainUser);
                     System.out.println(result);
                     break;
                 case UpdatePrice:
                     Matcher updatePriceMatcher = StoreMenuCommands.UpdatePrice.getMatcher(input);
                     productId = Integer.parseInt(updatePriceMatcher.group("productId"));
-                    float newPrice = Float.parseFloat(updatePriceMatcher.group("newPrice"));
+                    double newPrice = Double.parseDouble(updatePriceMatcher.group("newPrice"));
                     result = controller.updatePrice(productId, newPrice);
                     System.out.println(result);
                     break;

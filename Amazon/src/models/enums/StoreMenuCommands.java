@@ -6,10 +6,10 @@ import java.util.regex.Pattern;
 public enum StoreMenuCommands implements Command{
     AddProduct("^\\s*add\\s+product\\s+" +
             "-n\\s+(?<name>\".*\")\\s+" +
-            "-pc\\s+(?<producerCost>-?\\d+\\.\\d+|-?\\d+)\\s+" +
-            "-p\\s+(?<price>-?\\d+\\.\\d+|-?\\d+)\\s+" +
+            "-pc\\s+(?<producerCost>-?\\d+(\\.\\d+)?|-?\\d+)\\s+" +
+            "-p\\s+(?<price>-?\\d+(\\.\\d+)?|-?\\d+)\\s+" +
             "-about\\s+(?<aboutThisItem>\".*\")\\s+" +
-            "-np\\s+(?<numberOfProductsToSell>-?\\d+)\\s*$"),
+            "-np\\s+(?<numberOfProductsToSell>-?\\d+(\\.\\d+)?|-?\\d+)\\s*$"),
     ApplyDiscount("^\\s*apply\\s+discount\\s+" +
             "-p\\s+(?<productID>-?\\d+)\\s+" +
             "-d\\s+(?<discountPercentage>-?\\d+)\\s+" +
@@ -21,7 +21,7 @@ public enum StoreMenuCommands implements Command{
             "-amount\\s+(?<amount>-?\\d+)\\s*$"),
     UpdatePrice("^\\s*update\\s+price\\s+" +
             "-product\\s+(?<productId>-?\\d+)\\s+" +
-            "-price\\s+(?<newPrice>-?\\d+|\\d+.?\\d+)\\s*$"),
+            "-price\\s+(?<newPrice>-?\\d+(\\.\\d+)?)\\s*$"),
     Back("^\\s*go\\s*back\\s*$");
 
     private final String pattern;

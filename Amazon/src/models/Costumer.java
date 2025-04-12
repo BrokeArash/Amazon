@@ -131,7 +131,7 @@ public class Costumer extends User{
         StoreMenuController controller = new StoreMenuController();
         for (Product product : this.shoppingList) {
             Store thisStore = Store.getStoreByBrand(product.getBrand());
-            controller.addStock(product.getID(), product.getQuantity());
+            controller.addStock(product.getID(), product.getQuantity(), thisStore);
         }
     }
 

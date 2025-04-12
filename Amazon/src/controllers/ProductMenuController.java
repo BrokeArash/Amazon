@@ -10,7 +10,7 @@ public class ProductMenuController {
     public static String sortby;
     public static ArrayList<Product> products = new ArrayList<>();
 
-    public void showProducts(String sortBy, String mainSortBy) {
+    public void showProducts(String sortBy) {
         products.clear();
         String sort = sortBy;
         products.addAll(App.products);
@@ -83,10 +83,6 @@ public class ProductMenuController {
 
     public void showInformationProduct(int productID) {
         Product product = Costumer.getProductByID(productID);
-        double newPrice = 0.0;
-        if (product != null) {
-            newPrice = product.getPrice();
-        }
         if (product == null) {
             System.out.println("No product found.");
         } else {
@@ -126,7 +122,7 @@ public class ProductMenuController {
     }
 
 
-    public Result rateMessage(float number, String message, int productID) {
+    public Result rateMessage(double number, String message, int productID) {
         User mainUser = App.getLoggedIn();
         Product product = Costumer.getProductByID(productID);
         if (product == null) {

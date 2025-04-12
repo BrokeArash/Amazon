@@ -35,7 +35,7 @@ public class ProductMenu implements AppMenu{
                     String sortBy = showProductsMatcher.group("sortBy");
                     mainSortBy = sortBy;
                     sortBy = sortBy.replaceAll(" ", "").trim();
-                    controller.showProducts(sortBy.trim(), mainSortBy);
+                    controller.showProducts(sortBy.trim());
                     break;
                 case ShowNext:
                     controller.showNext();
@@ -54,7 +54,7 @@ public class ProductMenu implements AppMenu{
                     break;
                 case RateProduct:
                     Matcher rateProductMatcher = ProductMenuCommands.RateProduct.getMatcher(input);
-                    float number = Float.parseFloat(rateProductMatcher.group("number"));
+                    double number = Double.parseDouble(rateProductMatcher.group("number"));
                     String message;
                     if (rateProductMatcher.group("message") != null) {
                         message = rateProductMatcher.group("message");

@@ -42,10 +42,15 @@ public class CostumerMenuController {
             return new Result(false, "Order not found.");
         }
         Order order = Costumer.getOrderByID(id, mainUser);
-        float sum = 0;
-        order.products.sort(Comparator.comparing(Product::getID));
+        double sum = 0;
+        ArrayList<Product> sortedOrder = new ArrayList<>(order.products);
+        sortedOrder.sort(Comparator.comparing(Product::getID));
         for (Product product : order.products) {
-            sum += product.getPrice() * product.getQuantity();
+            if (product.getDiscount() > 0 && product.getNumberOfDiscounted() > 0) {
+                sum += product.getPrice() * product.getQuantity();
+            } else {
+                sum += product.getBasePrice() * product.getQuantity();
+            }
         }
         System.out.println("Products in this order:");
         System.out.println();
@@ -56,10 +61,18 @@ public class CostumerMenuController {
             System.out.printf("    Rating: %.1f/5\n", order.products.get(i).getRating());
 
             System.out.println("    Quantity: " + order.products.get(i).getQuantity());
-            if (order.products.get(i).getQuantity() > 1) {
-                System.out.printf("    Price: $%.1f each", order.products.get(i).getPrice());
+            if (order.products.get(i).getDiscount() > 0 && order.products.get(i).getNumberOfDiscounted() > 0) {
+                if (order.products.get(i).getQuantity() > 1) {
+                    System.out.printf("    Price: $%.1f each", order.products.get(i).getPrice());
+                } else {
+                    System.out.printf("    Price: $%.1f", order.products.get(i).getPrice());
+                }
             } else {
-                System.out.printf("    Price: $%.1f", order.products.get(i).getPrice());
+                if (order.products.get(i).getQuantity() > 1) {
+                    System.out.printf("    Price: $%.1f each", order.products.get(i).getBasePrice());
+                } else {
+                    System.out.printf("    Price: $%.1f", order.products.get(i).getBasePrice());
+                }
             }
             System.out.println();
         }
@@ -175,7 +188,7 @@ public class CostumerMenuController {
     }
 
 
-    public Result addCard(String cardNumber, String expirationDate, String cvv, float value) {
+    public Result addCard(String cardNumber, String expirationDate, String cvv, double value) {
         Costumer mainUser = (Costumer) App.getLoggedIn();
         Matcher cardNumberMatcher = CostumerMenuCommands.CheckCardNumber.getMatcher(cardNumber);
         Matcher expirationDateMatcher = CostumerMenuCommands.CheckDate.getMatcher(expirationDate);
@@ -198,7 +211,7 @@ public class CostumerMenuController {
         }
     }
 
-    public Result chargeCard(float amount, int cardID) {
+    public Result chargeCard(double amount, int cardID) {
         Costumer mainUser = (Costumer) App.getLoggedIn();
         Card card = Costumer.getCardByID(cardID, mainUser);
         if (amount <= 0) {
@@ -232,13 +245,19 @@ public class CostumerMenuController {
         } else {
             System.out.println("Your Shopping Cart:");
             System.out.println("------------------------------------");
-            Collections.sort(mainUser.shoppingList, Comparator.comparing(Product::getName));
+            ArrayList<Product> sortedProducts = new ArrayList<>(mainUser.shoppingList);
+            sortedProducts.sort(Comparator.comparing(Product::getName));
             for (Product product : mainUser.shoppingList) {
                 System.out.println("Product ID  : " + product.getID());
                 System.out.println("Name        : " + product.getName());
                 System.out.println("Quantity    : " + product.getQuantity());
-                System.out.printf("Price       : $%.1f (each)\n",  product.getPrice());
-                System.out.printf("Total Price : $%.1f\n", product.getPrice() * product.getQuantity());
+                if (product.getDiscount() > 0 && product.getNumberOfDiscounted() > 0) {
+                    System.out.printf("Price       : $%.1f (each)\n", product.getPrice());
+                    System.out.printf("Total Price : $%.1f\n", product.getPrice() * product.getQuantity());
+                }else {
+                    System.out.printf("Price       : $%.1f (each)\n", product.getBasePrice());
+                    System.out.printf("Total Price : $%.1f\n", product.getBasePrice() * product.getQuantity());
+                }
                 System.out.println("Brand       : " + product.getBrand());
                 System.out.printf("Rating      : %.1f/5\n", product.getRating());
                 System.out.println("------------------------------------");
@@ -251,12 +270,19 @@ public class CostumerMenuController {
         Card card = Costumer.getCardByID(cardID, mainUser);
         Address address = Costumer.getAddressByID(addressID, mainUser);
         HashMap<Store, Double> storeTemp = new HashMap<>();
-        float sum = 0;
+        double sum = 0;
         for (Product product : mainUser.shoppingList) {
             Store thisStore = Store.getStoreByBrand(product.getBrand());
-            double total = product.getQuantity() * product.getPrice();
-            sum += total;
-            storeTemp.merge(thisStore, total, Double::sum);
+            if (product.getNumberOfDiscounted() > 0 && product.getDiscount() > 0) {
+                double total = product.getQuantity() * product.getPrice();
+                sum += total;
+                storeTemp.merge(thisStore, total, Double::sum);
+            }  else {
+                double total = product.getQuantity() * product.getBasePrice();
+                sum += total;
+                storeTemp.merge(thisStore, total, Double::sum);
+            }
+
         }
         if (mainUser.shoppingList.isEmpty()) {
             return new Result(false, "Your shopping cart is empty.");

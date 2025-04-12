@@ -93,13 +93,13 @@ public class CostumerMenu implements AppMenu {
                     String cardNumber = addCardMatcher.group("cardNumber");
                     String expirationDate = addCardMatcher.group("expirationDate");
                     String cvv = addCardMatcher.group("cvv");
-                    float value = Float.parseFloat(addCardMatcher.group("initialValue"));
+                    double value = Double.parseDouble(addCardMatcher.group("initialValue"));
                     result = controller.addCard(cardNumber, expirationDate, cvv, value);
                     System.out.println(result);
                     break;
                 case ChargeCard:
                     Matcher chargeCardMatcher = CostumerMenuCommands.ChargeCard.getMatcher(input);
-                    float amount = Float.parseFloat(chargeCardMatcher.group("amount"));
+                    double amount = Double.parseDouble(chargeCardMatcher.group("amount"));
                     int cardID = Integer.parseInt(chargeCardMatcher.group("id"));
                     result = controller.chargeCard(amount, cardID);
                     System.out.println(result);

@@ -7,7 +7,7 @@ public class Product{
     private String brand;
     private int ID;
     private String name;
-    private float rating;
+    private double rating;
     private int quantity;
     private double basePrice;
     private double price;
@@ -60,7 +60,7 @@ public class Product{
         this.name = name;
     }
 
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
@@ -88,7 +88,7 @@ public class Product{
         this.ID = ID;
     }
 
-    public void setRating(float rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
@@ -153,12 +153,12 @@ public class Product{
     }
 
 
-    public float calculateAverageRating() {
+    public double calculateAverageRating() {
         if (ratings.isEmpty()) {
             return this.rating;
         }
 
-        float totalSum = 0f;
+        double totalSum = 0f;
         int ratingCount = 0;
 
         for(Rating rating : this.ratings) {

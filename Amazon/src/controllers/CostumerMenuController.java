@@ -24,8 +24,10 @@ public class CostumerMenuController {
             System.out.println("Total Items Ordered: " + order.getTIO());
             System.out.println();
             System.out.println("Products (Sorted by Name):");
-            for (int i = 0; i < order.products.size(); i++) { //TODO: sort by name
-                System.out.println("  " + (i+1) + "- " + order.products.get(i).getName());
+            ArrayList<Product> sortedNames = new ArrayList<>(order.products);
+            sortedNames.sort(Comparator.comparing(Product::getName));
+            for (int i = 0; i < sortedNames.size(); i++) { //TODO: sort by name
+                System.out.println("  " + (i+1) + "- " + sortedNames.get(i).getName());
             }
             System.out.println();
             System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -45,7 +47,7 @@ public class CostumerMenuController {
         double sum = 0;
         ArrayList<Product> sortedOrder = new ArrayList<>(order.products);
         sortedOrder.sort(Comparator.comparing(Product::getID));
-        for (Product product : order.products) {
+        for (Product product : sortedOrder) {
             if (product.getDiscount() > 0 && product.getNumberOfDiscounted() > 0) {
                 sum += product.getPrice() * product.getQuantity();
             } else {
@@ -54,24 +56,25 @@ public class CostumerMenuController {
         }
         System.out.println("Products in this order:");
         System.out.println();
-        for (int i = 0; i < order.products.size(); i++) {
-            System.out.println( (i+1) + "- Product Name: " + order.products.get(i).getName());
-            System.out.println("    ID: " + order.products.get(i).getID());
-            System.out.println("    Brand: " + order.products.get(i).getBrand());
-            System.out.printf("    Rating: %.1f/5\n", order.products.get(i).getRating());
-
-            System.out.println("    Quantity: " + order.products.get(i).getQuantity());
-            if (order.products.get(i).getDiscount() > 0 && order.products.get(i).getNumberOfDiscounted() > 0) {
-                if (order.products.get(i).getQuantity() > 1) {
-                    System.out.printf("    Price: $%.1f each", order.products.get(i).getPrice());
+        ArrayList<Product> sortedNames = new ArrayList<>(order.products);
+        sortedNames.sort(Comparator.comparing(Product::getID));
+        for (int i = 0; i < sortedNames.size(); i++) {
+            System.out.println( (i+1) + "- Product Name: " + sortedNames.get(i).getName());
+            System.out.println("    ID: " + sortedNames.get(i).getID());
+            System.out.println("    Brand: " + sortedNames.get(i).getBrand());
+            System.out.printf("    Rating: %.1f/5\n", sortedNames.get(i).getRating());
+            System.out.println("    Quantity: " + sortedNames.get(i).getQuantity());
+            if (sortedNames.get(i).getDiscount() > 0 && sortedNames.get(i).getNumberOfDiscounted() > 0) {
+                if (sortedNames.get(i).getQuantity() > 1) {
+                    System.out.printf("    Price: $%.1f each", sortedNames.get(i).getPrice());
                 } else {
-                    System.out.printf("    Price: $%.1f", order.products.get(i).getPrice());
+                    System.out.printf("    Price: $%.1f", sortedNames.get(i).getPrice());
                 }
             } else {
-                if (order.products.get(i).getQuantity() > 1) {
-                    System.out.printf("    Price: $%.1f each", order.products.get(i).getBasePrice());
+                if (sortedNames.get(i).getQuantity() > 1) {
+                    System.out.printf("    Price: $%.1f each", sortedNames.get(i).getBasePrice());
                 } else {
-                    System.out.printf("    Price: $%.1f", order.products.get(i).getBasePrice());
+                    System.out.printf("    Price: $%.1f", sortedNames.get(i).getBasePrice());
                 }
             }
             System.out.println();
@@ -247,7 +250,7 @@ public class CostumerMenuController {
             System.out.println("------------------------------------");
             ArrayList<Product> sortedProducts = new ArrayList<>(mainUser.shoppingList);
             sortedProducts.sort(Comparator.comparing(Product::getName));
-            for (Product product : mainUser.shoppingList) {
+            for (Product product : sortedProducts) {
                 System.out.println("Product ID  : " + product.getID());
                 System.out.println("Name        : " + product.getName());
                 System.out.println("Quantity    : " + product.getQuantity());

@@ -25,7 +25,7 @@ public class Product{
         this.brand = brand;
         this.ID = ++lastAssigned;
         this.name = name;
-        this.rating = 2.5F;
+        this.rating = 2.5;
         this.quantity = quantity;
         this.basePrice = basePrice;
         this.producerCost = producerCost;
@@ -154,11 +154,8 @@ public class Product{
 
 
     public double calculateAverageRating() {
-        if (ratings.isEmpty()) {
-            return this.rating;
-        }
 
-        double totalSum = 0f;
+        double totalSum = 0;
         int ratingCount = 0;
 
         for(Rating rating : this.ratings) {

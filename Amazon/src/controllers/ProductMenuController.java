@@ -122,7 +122,7 @@ public class ProductMenuController {
     }
 
 
-    public Result rateMessage(double number, String message, int productID) {
+    public Result rateMessage(int number, String message, int productID) {
         User mainUser = App.getLoggedIn();
         Product product = Costumer.getProductByID(productID);
         if (product == null) {
@@ -133,7 +133,7 @@ public class ProductMenuController {
             return new Result(false, "You must be logged in to rate a product.");
         } else {
             Costumer main = (Costumer) mainUser;
-            Rating newRate = new Rating(main, message, (int)number);
+            Rating newRate = new Rating(main, message, number);
             product.ratings.add(newRate);
             product.setRating(product.calculateAverageRating());
             return new Result(true, "Thank you! Your rating and review have been submitted successfully.");

@@ -54,7 +54,7 @@ public class ProductMenu implements AppMenu{
                     break;
                 case RateProduct:
                     Matcher rateProductMatcher = ProductMenuCommands.RateProduct.getMatcher(input);
-                    double number = Double.parseDouble(rateProductMatcher.group("number"));
+                    int number = Integer.parseInt(rateProductMatcher.group("number"));
                     String message;
                     if (rateProductMatcher.group("message") != null) {
                         message = rateProductMatcher.group("message");

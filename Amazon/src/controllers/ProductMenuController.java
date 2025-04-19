@@ -137,9 +137,14 @@ public class ProductMenuController {
             return new Result(false, "You must be logged in to rate a product.");
         } else {
             Costumer main = (Costumer) mainUser;
+            Product cartProduct = Costumer.getProductInCartByID(productID, main);
             Rating newRate = new Rating(main, message, number);
             product.ratings.add(newRate);
             product.setRating(product.calculateAverageRating());
+            try {
+                cartProduct.setRating(product.getRating());
+            } catch (Exception ignored){}
+            
             return new Result(true,
                     "Thank you! Your rating and review have been submitted successfully.");
         }

@@ -117,8 +117,8 @@ public class Costumer extends User{
         return null;
     }
 
-    public Product getProductInCartByID(int id, Costumer mainUser) {
-        for (Product product : this.shoppingList) {
+    public static Product getProductInCartByID(int id, Costumer mainUser) {
+        for (Product product : mainUser.shoppingList) {
             if (product.getID() == id) {
                 return product;
             }

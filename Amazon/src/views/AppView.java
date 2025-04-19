@@ -2,14 +2,12 @@ package views;
 
 import models.App;
 import models.enums.Menu;
-
 import java.util.Scanner;
 
 public class AppView{
     public void run() {
         Scanner scanner = new Scanner(System.in);
         do{
-            //System.out.println(App.getCurrentMenu()); //TODO: delete later
             App.getCurrentMenu().checkCommand(scanner);
             /* Log In */
             if (App.getCurrentMenu() == Menu.LoginMenu && App.isLogInSuccessful()) {

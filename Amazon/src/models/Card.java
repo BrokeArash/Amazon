@@ -1,9 +1,9 @@
 package models;
 
 public class Card {
-    private String cardNumber;
-    private String expirationDate;
-    private String cvv;
+    private final String cardNumber;
+    private final String expirationDate;
+    private final String cvv;
     private double value;
     private int id;
 
@@ -17,26 +17,6 @@ public class Card {
 
     public String getCardNumber() {
         return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public String getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(String expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
     }
 
     public double getValue() {

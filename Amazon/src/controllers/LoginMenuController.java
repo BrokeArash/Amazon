@@ -3,12 +3,12 @@ package controllers;
 import models.*;
 import models.enums.LoginMenuCommands;
 import models.enums.UserType;
-
 import java.util.regex.Matcher;
 
 public class LoginMenuController {
 
-    public Result createUser(String firstName, String lastName, String password, String reEnterPassword, String email) {
+    public Result createUser(String firstName, String lastName, String password,
+                             String reEnterPassword, String email) {
         Matcher checkFirst = LoginMenuCommands.CheckName.getMatcher(firstName);
         Matcher checkLast = LoginMenuCommands.CheckName.getMatcher(lastName);
         Matcher checkPassword = LoginMenuCommands.CheckPassword.getMatcher(password);
@@ -32,7 +32,8 @@ public class LoginMenuController {
             newCostumer.setType(UserType.Costumer);
             App.costumers.add(newCostumer);
             App.users.add(newCostumer);
-            return new Result(true, "User account for "+firstName + " " + lastName + " created successfully.");
+            return new Result(true, "User account for " +
+                    firstName + " " + lastName + " created successfully.");
         }
     }
 
@@ -105,7 +106,7 @@ public class LoginMenuController {
 
     }
 
-    public Result deleteAccount(String password, String reEnterPassword) { //TODO: change later
+    public Result deleteAccount(String password, String reEnterPassword) {
         if (App.getLoggedIn() == null) {
             return new Result(false, "You should login first.");
         } else if (!password.equals(reEnterPassword)) {

@@ -1,10 +1,8 @@
 package views;
 
 import controllers.LoginMenuController;
-import models.App;
 import models.Result;
 import models.enums.LoginMenuCommands;
-import models.enums.Menu;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;

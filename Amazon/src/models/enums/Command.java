@@ -3,7 +3,5 @@ package models.enums;
 import java.util.regex.Matcher;
 
 public interface Command {
-    final String pattern = "";
-
-    public Matcher getMatcher(String input);
+    Matcher getMatcher(String input);
 }

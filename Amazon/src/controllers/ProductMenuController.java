@@ -39,7 +39,8 @@ public class ProductMenuController {
             }
             Product currentProduct = products.get(i);
             if (currentProduct.getNumberOfDiscounted() > 0 && currentProduct.getNumberOfDiscounted() != 0) {
-                System.out.printf("ID: %d  **(On Sale! %d units discounted)**\n", currentProduct.getID(), currentProduct.getNumberOfDiscounted());
+                System.out.printf("ID: %d  **(On Sale! %d units discounted)**\n",
+                        currentProduct.getID(), currentProduct.getNumberOfDiscounted());
             } else if (currentProduct.getQuantity() <= 0) {
                 System.out.printf("ID: %d  **(Sold out!)**\n", currentProduct.getID());
             } else {
@@ -49,7 +50,8 @@ public class ProductMenuController {
             System.out.printf("Rate: %.1f/5\n", currentProduct.getRating());
 
             if (currentProduct.getNumberOfDiscounted() > 0 && currentProduct.getNumberOfDiscounted() != 0) {
-                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", currentProduct.getBasePrice(), currentProduct.getPrice(),(int)(currentProduct.getDiscount()*100));
+                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", currentProduct.getBasePrice(),
+                        currentProduct.getPrice(),(int)(currentProduct.getDiscount()*100));
             } else {
                 System.out.printf("Price: $%.1f\n", currentProduct.getBasePrice());
             }
@@ -91,7 +93,8 @@ public class ProductMenuController {
             if (product.getQuantity() == 0) {
                 System.out.println("Name: " + product.getName() + "  **(Sold out!)**");
             } else if (product.getDiscount() > 0 && product.getNumberOfDiscounted() > 0) {
-                System.out.println("Name: " + product.getName() + "  **(On Sale! " + product.getNumberOfDiscounted() + " units discounted)**");
+                System.out.println("Name: " + product.getName() + "  **(On Sale! "
+                        + product.getNumberOfDiscounted() + " units discounted)**");
             } else {
                 System.out.println("Name: " + product.getName());
             }
@@ -100,14 +103,15 @@ public class ProductMenuController {
             System.out.printf("Rating: %.1f/5\n", product.getRating());
 
             if (product.getDiscount() > 0 && product.getNumberOfDiscounted() > 0) {
-                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getBasePrice(), product.getPrice(),(int)(product.getDiscount()*100)); //TODO
+                System.out.printf("Price: ~$%.1f~ → $%.1f (-%d%%)\n", product.getBasePrice(),
+                        product.getPrice(),(int)(product.getDiscount()*100));
             } else {
                 System.out.printf("Price: $%.1f\n", product.getBasePrice());
             }
             System.out.println("Brand: " + product.getBrand());
             System.out.println("Number of Products Remaining: " + product.getQuantity());
             System.out.println("About this item:");
-            System.out.println(product.getATI()); //TODO
+            System.out.println(product.getATI());
             System.out.println();
             System.out.println("Customer Reviews:");
             System.out.println("------------------------------------------------");
@@ -136,7 +140,8 @@ public class ProductMenuController {
             Rating newRate = new Rating(main, message, number);
             product.ratings.add(newRate);
             product.setRating(product.calculateAverageRating());
-            return new Result(true, "Thank you! Your rating and review have been submitted successfully.");
+            return new Result(true,
+                    "Thank you! Your rating and review have been submitted successfully.");
         }
     }
 
@@ -161,7 +166,8 @@ public class ProductMenuController {
                 cartProduct.addQuantity(amount);
                 product.addQuantity(-amount);
                 product.addNumberOfDiscounted(-amount);
-                return new Result(true, "\"" + product.getName() + "\" (x" + amount + ") has been added to your cart.");
+                return new Result(true, "\"" + product.getName() + "\"" +
+                        " (x" + amount + ") has been added to your cart.");
             }
         }
 
@@ -170,7 +176,8 @@ public class ProductMenuController {
         product.addQuantity(-amount);
         product.addNumberOfDiscounted(-amount);
         main.shoppingList.add(cartProduct);
-        return new Result(true, "\"" + product.getName() + "\" (x" + amount + ") has been added to your cart.");
+        return new Result(true, "\"" + product.getName() + "\"" +
+                " (x" + amount + ") has been added to your cart.");
 
     }
 

@@ -3,7 +3,6 @@ package controllers;
 import models.*;
 import models.enums.CostumerMenuCommands;
 import models.enums.LoginMenuCommands;
-
 import java.util.*;
 import java.util.regex.Matcher;
 
@@ -26,7 +25,7 @@ public class CostumerMenuController {
             System.out.println("Products (Sorted by Name):");
             ArrayList<Product> sortedNames = new ArrayList<>(order.products);
             sortedNames.sort(Comparator.comparing(Product::getName));
-            for (int i = 0; i < sortedNames.size(); i++) { //TODO: sort by name
+            for (int i = 0; i < sortedNames.size(); i++) {
                 System.out.println("  " + (i+1) + "- " + sortedNames.get(i).getName());
             }
             System.out.println();
@@ -183,7 +182,7 @@ public class CostumerMenuController {
                 System.out.println("Postal Code: " + address.getPostal());
                 System.out.println("Country: " + address.getCountry());
                 System.out.println("City: " + address.getCity());
-                System.out.println("Street: " + address.getStreet()); //TODO: might be wrong with number
+                System.out.println("Street: " + address.getStreet());
                 System.out.println();
                 System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
             }
@@ -199,7 +198,8 @@ public class CostumerMenuController {
         if (cardNumberMatcher == null) {
             return new Result(false, "The card number must be exactly 16 digits.");
         } else if (expirationDateMatcher == null) {
-            return new Result(false, "Invalid expiration date. Please enter a valid date in MM/YY format.");
+            return new Result(false,
+                    "Invalid expiration date. Please enter a valid date in MM/YY format.");
         } else if (cvvMatcher == null) {
             return new Result(false, "The CVV code must be 3 or 4 digits.");
         } else if (value < 0) {
@@ -210,7 +210,8 @@ public class CostumerMenuController {
             int newId = mainUser.getNextCardId();
             Card newCard = new Card(newId, cardNumber, expirationDate, cvv, value);
             mainUser.cards.add(newCard);
-            return new Result(true, "Credit card with Id " + newCard.getId() + " has been added successfully.");
+            return new Result(true, "Credit card with Id " +
+                    newCard.getId() + " has been added successfully.");
         }
     }
 
@@ -223,7 +224,8 @@ public class CostumerMenuController {
             return new Result(false, "No credit card found.");
         } else {
             card.addValue(amount);
-            System.out.printf("$%.1f has been added to the credit card %d. New balance: $%.1f.", amount, card.getId(), card.getValue());
+            System.out.printf("$%.1f has been added to the credit card %d. New balance: $%.1f.",
+                    amount, card.getId(), card.getValue());
             return new Result(true, "");
         }
     }
@@ -310,7 +312,8 @@ public class CostumerMenuController {
                 mainProduct.addNumberOfSold(product.getQuantity());
             }
             mainUser.shoppingList.clear();
-            System.out.printf("Order has been placed successfully!\nOrder ID: %d\nTotal Paid: $%.1f\nShipping to: %s\n", newOrder.getID(), sum, newOrder.getAddress());
+            System.out.printf("Order has been placed successfully!\nOrder ID:" +
+                    " %d\nTotal Paid: $%.1f\nShipping to: %s\n", newOrder.getID(), sum, newOrder.getAddress());
             return new Result(true, "");
         }
     }
@@ -327,7 +330,8 @@ public class CostumerMenuController {
         } else if (quantity <= 0) {
             return new Result(false, "Quantity must be a positive number.");
         } else if (quantity > cartProduct.getQuantity()) {
-            return new Result(false, "You only have " + cartProduct.getQuantity() + " of \"" + cartProduct.getName() + "\" in your cart.");
+            return new Result(false, "You only have " + cartProduct.getQuantity() +
+                    " of \"" + cartProduct.getName() + "\" in your cart.");
         } else {
             cartProduct.decreaseQuantity(quantity);
             product.addQuantity(quantity);
@@ -336,10 +340,12 @@ public class CostumerMenuController {
                 product.addNumberOfDiscounted(quantity);
             }
             if (cartProduct.getQuantity() > 0) {
-                return new Result(true,"Successfully removed " + quantity + " of \"" + product.getName() + "\" from your cart.");
+                return new Result(true,"Successfully removed " + quantity +
+                        " of \"" + product.getName() + "\" from your cart.");
             } else {
                 mainUser.shoppingList.remove(cartProduct);
-                return new Result(false, "\"" + product.getName() + "\" has been completely removed from your cart.");
+                return new Result(false, "\"" + product.getName() + "\" " +
+                        "has been completely removed from your cart.");
             }
         }
     }

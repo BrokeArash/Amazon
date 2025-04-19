@@ -2,7 +2,6 @@ package models;
 
 import controllers.StoreMenuController;
 import models.enums.UserType;
-
 import java.util.ArrayList;
 
 public class Costumer extends User{
@@ -134,9 +133,6 @@ public class Costumer extends User{
             controller.addStock(product.getID(), product.getQuantity(), thisStore);
         }
     }
-
-
-
 
     @Override
     public String getEmail() {

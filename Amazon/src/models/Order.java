@@ -1,8 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Order {
     private int ID;
@@ -28,14 +26,8 @@ public class Order {
         String address = this.Address.getStreet() + ", " + this.Address.getCity() +", " + this.Address.getCountry();
         return address;
     }
-    public void setAddress(Address address) {
-        Address = address;
-    }
 
     public int getTIO() {
         return TIO;
-    }
-    public void setTIO(int TIO) {
-        this.TIO = TIO;
     }
 }

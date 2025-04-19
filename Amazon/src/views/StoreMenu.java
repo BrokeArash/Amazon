@@ -4,8 +4,6 @@ import controllers.StoreMenuController;
 import models.App;
 import models.Result;
 import models.Store;
-import models.enums.Menu;
-import models.enums.ProductMenuCommands;
 import models.enums.StoreMenuCommands;
 import models.enums.UserType;
 
@@ -40,8 +38,10 @@ public class StoreMenu implements AppMenu{
                     double price = Double.parseDouble((addProductMatcher.group("price")));
                     String aboutThisItem = addProductMatcher.group("aboutThisItem");
                     aboutThisItem = aboutThisItem.substring(1, aboutThisItem.length()-1);
-                    int numberOfProductsToSell = Integer.parseInt(addProductMatcher.group("numberOfProductsToSell"));
-                    Result result = controller.addProduct(name, producerCost, price, aboutThisItem, numberOfProductsToSell);
+                    int numberOfProductsToSell = Integer.parseInt(addProductMatcher.
+                            group("numberOfProductsToSell"));
+                    Result result = controller.addProduct(
+                            name, producerCost, price, aboutThisItem, numberOfProductsToSell);
                     System.out.println(result);
                     break;
                 case ApplyDiscount:

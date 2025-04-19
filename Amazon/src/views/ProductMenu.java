@@ -1,10 +1,7 @@
 package views;
 
 import controllers.ProductMenuController;
-import models.App;
 import models.Result;
-import models.enums.LoginMenuCommands;
-import models.enums.Menu;
 import models.enums.ProductMenuCommands;
 
 import java.util.Scanner;
@@ -44,7 +41,8 @@ public class ProductMenu implements AppMenu{
                     controller.showPast();
                     break;
                 case ShowInformationProduct:
-                    Matcher showInformationProductMatcher = ProductMenuCommands.ShowInformationProduct.getMatcher(input);
+                    Matcher showInformationProductMatcher = ProductMenuCommands.
+                            ShowInformationProduct.getMatcher(input);
                     int productID = -1;
                     try {
                         productID = Integer.parseInt(showInformationProductMatcher.group("productId"));

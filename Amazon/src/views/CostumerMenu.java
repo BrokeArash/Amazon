@@ -4,8 +4,6 @@ import controllers.CostumerMenuController;
 import models.App;
 import models.Result;
 import models.enums.CostumerMenuCommands;
-import models.enums.LoginMenuCommands;
-import models.enums.Menu;
 import models.enums.UserType;
 
 import java.util.Scanner;
@@ -41,7 +39,7 @@ public class CostumerMenu implements AppMenu {
                     break;
                 case OrderDetails:
                     Matcher orderMatcher = CostumerMenuCommands.OrderDetails.getMatcher(input);
-                    int id = Integer.parseInt(orderMatcher.group("orderID")); //TODO: might be string
+                    int id = Integer.parseInt(orderMatcher.group("orderID"));
                     Result result = controller.orderDetails(id);
                     System.out.println(result);
                     break;

@@ -1,24 +1,20 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Product{
-    private String brand;
-    private int ID;
-    private String name;
+    private final String brand;
+    private final int ID;
+    private final String name;
     private double rating;
     private int quantity;
     private double basePrice;
-    private double price;
     private final double producerCost;
     private double discount;
     private int numberOfDiscounted = 0;
-    private String ATI;
+    private final String ATI;
     private static int lastAssigned = 100;
     private int numberOfSold = 0;
-
-
     public ArrayList<Rating> ratings = new ArrayList<>();
 
     public Product(String brand, int quantity,double producerCost, double basePrice, String name, String ati) {
@@ -56,10 +52,6 @@ public class Product{
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public double getRating() {
         return rating;
     }
@@ -84,20 +76,12 @@ public class Product{
         return producerCost;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
     public void setRating(double rating) {
         this.rating = rating;
     }
 
     public void decreaseQuantity(int quantity) {
         this.quantity -= quantity;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public double getDiscount() {
@@ -118,10 +102,6 @@ public class Product{
 
     public String getATI() {
         return ATI;
-    }
-
-    public void setATI(String ATI) {
-        this.ATI = ATI;
     }
 
     public int getNumberOfSold() {
@@ -147,11 +127,6 @@ public class Product{
     public String getBrand() {
         return brand;
     }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
 
     public double calculateAverageRating() {
 

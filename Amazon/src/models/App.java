@@ -2,7 +2,6 @@ package models;
 
 import models.enums.Menu;
 import models.enums.UserType;
-
 import java.util.ArrayList;
 
 public class App {

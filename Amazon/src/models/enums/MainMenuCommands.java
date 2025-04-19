@@ -8,10 +8,6 @@ public enum MainMenuCommands implements Command {
     GoToMenu("^\\s*go\\s+to\\s+-m\\s+(?<menu>\\S+)\\s*$"),
     Exit("^\\s*exit\\s*$");
 
-
-    
-
-
     private final String pattern;
 
     MainMenuCommands(String pattern) {

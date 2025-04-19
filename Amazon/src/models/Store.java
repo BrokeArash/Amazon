@@ -1,10 +1,7 @@
 package models;
 
-import controllers.StoreMenuController;
 import models.enums.UserType;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Store extends User{
 
@@ -43,23 +40,10 @@ public class Store extends User{
         this.costs += costs;
     }
 
-    public static boolean isEmailUnique (String email) {
-        return Store.getStoreByEmail(email) == null;
-    }
-
     public static Store getStoreByEmail(String email) {
         for (Store store : App.stores) {
             if (store.getEmail().equals(email)) {
                 return store;
-            }
-        }
-        return null;
-    }
-
-    public static Product getProductByID(int id, Store mainUser) { //TODO: override
-        for (Product product : mainUser.products) {
-            if (product.getID() == id) {
-                return product;
             }
         }
         return null;
